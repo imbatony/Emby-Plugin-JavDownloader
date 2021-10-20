@@ -23,13 +23,13 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore
+      run: dotnet build %SOLUTION% --configuration %BUILD_CONFIG% --no-restore
 
     - name: Run tests
-      run: dotnet test /p:Configuration=$BUILD_CONFIG --no-restore --no-build --verbosity normal
+      run: dotnet test /p:Configuration=%BUILD_CONFIG% --no-restore --no-build --verbosity normal
 
     - name: Pack
-      run: dotnet pack --configuration $BUILD_CONFIG
+      run: dotnet pack --configuration %BUILD_CONFIG%
 
     - name: Publish
       run: nuget push **\*.nupkg -Source 'https://nuget.pkg.github.com/imbatony/index.json' -ApiKey ${{secrets.NUGET_TOKEN}}
