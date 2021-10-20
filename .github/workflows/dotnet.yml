@@ -34,4 +34,4 @@ jobs:
       run: dotnet pack --configuration Release
 
     - name: Publish
-      run: nuget push **\*.nupkg -Source 'https://nuget.pkg.github.com/imbatony/index.json' -ApiKey ${{secrets.NUGET_TOKEN}}
+      run: dotnet nuget push **\*.nupkg -s 'https://nuget.pkg.github.com/imbatony/index.json' -k ${{secrets.NUGET_TOKEN}}
