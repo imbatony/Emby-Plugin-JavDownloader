@@ -8,7 +8,9 @@ on:
 
 jobs:
   build:
-
+    env:
+      BUILD_CONFIG: 'Release'
+      SOLUTION: 'MediaBrowser.Plugins.JavDownloader.sln'
     runs-on: windows-latest
 
     steps:
@@ -17,9 +19,17 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore
+
+    - name: Run tests
+      run: dotnet test /p:Configuration=$BUILD_CONFIG --no-restore --no-build --verbosity normal
+
+    - name: Pack
+      run: dotnet pack --configuration $BUILD_CONFIG
+
+    - name: Publish
+      run: nuget push **\*.nupkg -Source 'https://nuget.pkg.github.com/imbatony/index.json' -ApiKey ${{secrets.NUGET_TOKEN}}

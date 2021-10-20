@@ -11,6 +11,8 @@
     <RepositoryUrl>https://github.com/imbatony/Emby-Plugin-JavDownloader</RepositoryUrl>
     <PackageIcon>plugin.png</PackageIcon>
     <PackageIconUrl />
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Company>JavDownloader</Company>
     <Authors>esfak47@gmail.com</Authors>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
@@ -24,6 +26,10 @@
   <ItemGroup>
     <None Remove="Configuration\configPage.html" />
     <None Remove="plugin.png" />
+    <None Include="plugin.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
