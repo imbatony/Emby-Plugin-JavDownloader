@@ -27,6 +27,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Tests
         /// The GetPagesTest.
         /// </summary>
         [TestMethod()]
+        [Ignore]
         public void GetPagesTest()
         {
             var plugin = new Plugin(null, null);
