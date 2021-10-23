@@ -64,7 +64,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Http
             }
             client_old = client;
 
-            var handler = new ProxyHttpClientHandler();
+            var handler = new ProxyHttpClientHandler(false);
             client = new HttpClient(handler, true);
             ac?.Invoke(client);
 
@@ -112,6 +112,8 @@ namespace MediaBrowser.Plugins.JavDownloader.Http
         /// <returns>The <see cref="Task{HttpResponseMessage}"/>.</returns>
         public Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
             => GetClient().PostAsync(requestUri, content);
+
+        public Task<HttpResponseMessage> SendAsync(HttpRequestMessage message) => GetClient().SendAsync(message);
 
         /// <summary>
         /// Gets the BaseAddress.

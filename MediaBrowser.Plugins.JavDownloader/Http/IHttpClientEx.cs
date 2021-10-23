@@ -64,5 +64,12 @@ namespace MediaBrowser.Plugins.JavDownloader.Http
         /// <param name="content">The content<see cref="HttpContent"/>.</param>
         /// <returns>The <see cref="Task{HttpResponseMessage}"/>.</returns>
         Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content);
+
+        /// <summary>
+        /// The SendAsync.
+        /// </summary>
+        /// <param name="message">The message<see cref="HttpRequestMessage"/>.</param>
+        /// <returns>The <see cref="Task{HttpResponseMessage}"/>.</returns>
+        Task<HttpResponseMessage> SendAsync(HttpRequestMessage message);
     }
 }

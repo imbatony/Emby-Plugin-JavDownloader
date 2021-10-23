@@ -90,6 +90,11 @@ namespace MediaBrowser.Plugins.JavDownloader
             }
         }
 
+        public void SetTestConf(PluginConfiguration configuration)
+        {
+            this.Configuration = configuration;
+        }
+
         /// <summary>
         /// Gets the Instance.
         /// </summary>

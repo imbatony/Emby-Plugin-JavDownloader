@@ -96,6 +96,45 @@ namespace MediaBrowser.Plugins.JavDownloader.Extensions
         /// </summary>
         /// <param name="client">The client<see cref="IHttpClientEx"/>.</param>
         /// <param name="requestUri">.</param>
+        /// <param name="content">The content<see cref="HttpContent"/>.</param>
+        /// <param name="log">The log<see cref="ILogger"/>.</param>
+        /// <returns>.</returns>
+        public static async Task<HtmlDocument> GetHtmlDocumentByReqAsync(this IHttpClientEx client, HttpRequestMessage message, ILogger log = default)
+        {
+            try
+            {
+                var resp = await client.SendAsync(message);
+                if (resp.IsSuccessStatusCode == false)
+                {
+                    var eee = await resp.Content.ReadAsStringAsync();
+                    return null;
+                }
+
+                var html = await resp.Content.ReadAsStringAsync();
+                if (string.IsNullOrWhiteSpace(html) == false)
+                {
+                    var doc = new HtmlDocument();
+                    doc.LoadHtml(html);
+                    return doc;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (log != null)
+                {
+
+                    log.ErrorException($"{ex.Message}", ex);
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 获取 HtmlDocument，通过 Post 方法提交.
+        /// </summary>
+        /// <param name="client">The client<see cref="IHttpClientEx"/>.</param>
+        /// <param name="requestUri">.</param>
         /// <param name="param">The param<see cref="Dictionary{string, string}"/>.</param>
         /// <param name="log">The log<see cref="ILogger"/>.</param>
         /// <returns>.</returns>

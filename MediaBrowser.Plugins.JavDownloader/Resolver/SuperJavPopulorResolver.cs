@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MediaBrowser.Plugins.JavDownloader.Provider
+namespace MediaBrowser.Plugins.JavDownloader.Resolver
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -44,8 +44,8 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider
         /// <returns>The <see cref="Task{List{string}}"/>.</returns>
         public async Task<List<string>> Resolve()
         {
-            var doc = await httpClientEx.GetHtmlDocumentAsync(baseUrl);
-            var popular = doc.DocumentNode.SelectNodes("//div[@class='swiper-slide']/div/a");
+            var doc = await httpClientEx.GetHtmlDocumentAsync(baseUrl+ "/zh/popular");
+            var popular = doc.DocumentNode.SelectNodes("//div[@class='post']/a");
             return popular.Select(e => e.GetAttributeValue("href", string.Empty)).Where(e => e.IsWebUrl()).Distinct().ToList();
         }
     }

@@ -7,9 +7,11 @@
 namespace MediaBrowser.Plugins.JavDownloader.Provider
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using MediaBrowser.Model.Logging;
     using MediaBrowser.Plugins.JavDownloader.Media;
+    using MediaBrowser.Plugins.JavDownloader.Resolver;
 
     /// <summary>
     /// Defines the <see cref="SuperJavProvider" />.
@@ -19,12 +21,12 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider
         /// <summary>
         /// Gets or sets the PopularResolver.
         /// </summary>
-        public IListConentResolver PopularResolver { get; set; }
+        private readonly IListConentResolver popularResolver;
 
         /// <summary>
         /// Gets or sets the DetailResolver.
         /// </summary>
-        public IMediaResolver DetailResolver { get; set; }
+        private readonly IMediaResolver detailResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SuperJavProvider"/> class.
@@ -33,16 +35,18 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider
         /// <param name="log">The log<see cref="ILogger"/>.</param>
         public SuperJavProvider(string base_url, ILogger log) : base(base_url, log)
         {
-            this.PopularResolver = new SuperJavPopulorResolver(BaseUrl, this.client);
+            this.popularResolver = new SuperJavPopulorResolver(BaseUrl, this.client);
+            this.detailResolver = new SuperJavDetailResolver(this.client, log);
         }
 
         /// <summary>
         /// The GetTodayPopular.
         /// </summary>
         /// <returns>The <see cref="List{IMedia}"/>.</returns>
-        public override List<IMedia> GetTodayPopular()
+        public override async Task<List<IMedia>> GetTodayPopular()
         {
-            throw new System.NotImplementedException();
+            var list = await this.popularResolver.Resolve();
+            return list.SelectMany(e => this.Resolve(e).Result).Distinct(new MediaEqualityComparer()).ToList();
         }
 
         /// <summary>
@@ -50,9 +54,9 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider
         /// </summary>
         /// <param name="url">The url<see cref="string"/>.</param>
         /// <returns>The <see cref="Task{IMedia}"/>.</returns>
-        public override Task<IMedia> Resolve(string url)
+        public override Task<List<IMedia>> Resolve(string url)
         {
-            throw new System.NotImplementedException();
+            return this.detailResolver.GetMedias(url);
         }
     }
 }

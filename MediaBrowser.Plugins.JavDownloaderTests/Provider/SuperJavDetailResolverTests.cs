@@ -6,8 +6,10 @@
 
 namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
 {
+    using System.Net.Http;
     using MediaBrowser.Model.Logging;
     using MediaBrowser.Plugins.JavDownloader.Http;
+    using MediaBrowser.Plugins.JavDownloader.Resolver;
     using MediaBrowser.Plugins.JavDownloaderTests;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
@@ -30,7 +32,8 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
         public void Init()
         {
             var mock = new Mock<IHttpClientEx>();
-            mock.SetUpMock("", "superjavdetail.html");
+            mock.SetUpMock("https://supjav.com/zh/118580.html", "superjavdetail.html");
+            mock.Setup(e => e.SendAsync(It.IsAny<HttpRequestMessage>())).ReturnsAsync(new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = new StringContent(Helper.GetSampleContent("steamtape.html")) });
             this.resolver = new SuperJavDetailResolver(mock.Object, new Mock<ILogger>().Object);
         }
 
@@ -40,7 +43,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
         [TestMethod()]
         public void GetMediasTest()
         {
-            var result = this.resolver.GetMedias("").Result;
+            var result = this.resolver.GetMedias("https://supjav.com/zh/118580.html").Result;
         }
     }
 }

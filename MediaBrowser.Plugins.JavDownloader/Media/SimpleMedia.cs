@@ -27,6 +27,11 @@
         public string Provider { get; set; }
 
         /// <summary>
+        /// Gets the Provider.
+        /// </summary>
+        public string Part { get; set; }
+
+        /// <summary>
         /// Gets the Videos.
         /// </summary>
         public List<JavVideo> Videos { get; set; }

@@ -7,6 +7,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Configuration
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
     using MediaBrowser.Model.Plugins;
@@ -131,7 +132,10 @@ namespace MediaBrowser.Plugins.JavDownloader.Configuration
         /// X-FORWARDED-FOR IP地址..
         /// </summary>
         public string X_FORWARDED_FOR { get; set; } = "17.172.224.99";
-    }
+
+
+        public string DownloadPath { get; set; } = Environment.GetEnvironmentVariable("JavDownloaderDownloadPath") ?? Path.GetTempPath();
+}
 
     /// <summary>
     /// 代理类型

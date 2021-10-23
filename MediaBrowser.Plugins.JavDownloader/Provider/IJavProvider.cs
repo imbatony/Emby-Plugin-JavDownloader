@@ -26,7 +26,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider
         /// </summary>
         /// <param name="url">The url<see cref="string"/>.</param>
         /// <returns>The <see cref="Task{IMedia}"/>.</returns>
-        Task<IMedia> Resolve(string url);
+        Task<List<IMedia>> Resolve(string url);
 
         /// <summary>
         /// The Match.

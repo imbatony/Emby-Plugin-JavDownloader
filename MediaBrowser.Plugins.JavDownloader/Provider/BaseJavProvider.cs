@@ -125,23 +125,15 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider
         /// The GetTodayPopular.
         /// </summary>
         /// <returns>The <see cref="List{IMedia}"/>.</returns>
-        public abstract List<IMedia> GetTodayPopular();
+        public abstract Task<List<IMedia>> GetTodayPopular();
 
-        /// <summary>
-        /// The GetTodayPopular.
-        /// </summary>
-        /// <returns>The <see cref="Task{List{IMedia}}"/>.</returns>
-        Task<List<IMedia>> IJavProvider.GetTodayPopular()
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// The Resolve.
         /// </summary>
         /// <param name="url">The url<see cref="string"/>.</param>
         /// <returns>The <see cref="Task{IMedia}"/>.</returns>
-        public abstract Task<IMedia> Resolve(string url);
+        public abstract Task<List<IMedia>> Resolve(string url);
 
         /// <summary>
         /// The Match.

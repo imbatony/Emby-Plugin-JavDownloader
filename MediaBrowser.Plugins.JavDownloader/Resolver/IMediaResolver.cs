@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MediaBrowser.Plugins.JavDownloader.Provider
+namespace MediaBrowser.Plugins.JavDownloader.Resolver
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;

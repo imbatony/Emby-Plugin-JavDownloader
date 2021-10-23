@@ -8,6 +8,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
 {
     using System.Linq;
     using MediaBrowser.Plugins.JavDownloader.Http;
+    using MediaBrowser.Plugins.JavDownloader.Resolver;
     using MediaBrowser.Plugins.JavDownloaderTests;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
@@ -30,7 +31,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
         public void Init()
         {
             var mock = new Mock<IHttpClientEx>();
-            mock.SetUpMock("", "superjavpopular.html");
+            mock.SetUpMock("/zh/popular", "superjavpopular.html");
             this.resolver = new SuperJavPopulorResolver("", mock.Object);
         }
 
@@ -49,9 +50,10 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
         [TestMethod()]
         public void ResolveTest()
         {
+            new Plugin(null, null);
             var list = this.resolver.Resolve().Result;
             Assert.IsNotNull(list);
-            Assert.AreEqual(18, list.Count());
+            Assert.AreEqual(24, list.Count());
         }
     }
 }
