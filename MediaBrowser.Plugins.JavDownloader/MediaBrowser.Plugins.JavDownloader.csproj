@@ -20,7 +20,10 @@
   <ItemGroup>
     <PackageReference Include="ILRepack" Version="2.0.18" />
     <PackageReference Include="LiteDB" Version="5.0.10" />
+    <PackageReference Include="HttpToSocks5Proxy" Version="1.4.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.33" GeneratePathProperty="true" />
     <PackageReference Include="MediaBrowser.Server.Core" Version="4.6.0.50-*" Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   
   <ItemGroup>
@@ -38,8 +41,8 @@
   </ItemGroup>
 
   <!--合并外部程序集-->
-  <Target Name="ILRepack" AfterTargets="PostBuildEvent">
-    <Exec Command="&quot;$(ILRepack)&quot; /out:$(AssemblyName).dll $(AssemblyName).dll LiteDB.dll" WorkingDirectory="$(OutputPath)" />
+  <Target Name="ILRepack" AfterTargets="PostBuildEvent" Condition="'$(Configuration)'=='Release'">
+    <Exec Command="&quot;$(ILRepack)&quot; /out:$(AssemblyName) $(AssemblyName).dll Newtonsoft.Json.dll MihaZupan.HttpToSocks5Proxy.dll HtmlAgilityPack.dll LiteDB.dll" WorkingDirectory="$(OutputPath)" />
   </Target>
   <!--打包-->
   <Target Name="Zip" AfterTargets="ILRepack" Condition="'$(Configuration)'=='Release'">
@@ -48,7 +51,7 @@
       <TempZipDirectory Include="$(OutputPath)output" />
     </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="@(TempZipDirectory)" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName)" DestinationFolder="@(TempZipDirectory)" />
     <ZipDirectory SourceDirectory="@(TempZipDirectory)" DestinationFile="$(BaseOutputPath)Emby.JavDownloader@v$(Version).zip" Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'" />
     <RemoveDir Directories="@(TempZipDirectory)" />
   </Target>
