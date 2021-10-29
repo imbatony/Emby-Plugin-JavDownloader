@@ -1,7 +1,9 @@
 ﻿namespace MediaBrowser.Plugins.JavDownloader.Data
 {
     using System;
+    using System.Collections.Generic;
     using LiteDB;
+    using MediaBrowser.Plugins.JavDownloader.Media;
 
     /// <summary>
     /// Defines the <see cref="Job" />.
@@ -28,14 +30,12 @@
         public string Num { get; set; }
 
         /// <summary>
-        /// Gets or sets the Url
-        /// 链接地址...
+        /// Gets the Videos.
         /// </summary>
-        public string Url { get; set; }
+        public List<JavVideo> Videos { get; set; }
 
         /// <summary>
         /// Gets or sets the Status
-        /// 链接地址...
         /// </summary>
         public int Status { get; set; }
 

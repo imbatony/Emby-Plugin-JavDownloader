@@ -24,11 +24,6 @@ namespace MediaBrowser.Plugins.JavDownloader.Media
         string Num { get; }
 
         /// <summary>
-        /// Gets the Part.
-        /// </summary>
-        string Part { get; }
-
-        /// <summary>
         /// Gets the Title.
         /// </summary>
         string Title { get; }

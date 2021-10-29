@@ -15,7 +15,7 @@
         /// <returns>The <see cref="bool"/>.</returns>
         public bool Equals(IMedia x, IMedia y)
         {
-            return x.Num == y.Num && x.Part == y.Part;
+            return x.Num == y.Num;
         }
 
         /// <summary>
