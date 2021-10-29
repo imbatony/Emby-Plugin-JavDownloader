@@ -6,6 +6,9 @@
     <Description>javdownloader</Description>
     <ToolCommandName>javd</ToolCommandName>
     <Version>1.$([System.DateTime]::Now.ToString(yyyy.MMdd.HHmm))</Version>
+    <PackageProjectUrl>https://github.com/imbatony/Emby-Plugin-JavDownloader</PackageProjectUrl>
+    <RepositoryType>Git</RepositoryType>
+    <RepositoryUrl>https://github.com/imbatony/Emby-Plugin-JavDownloader</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">

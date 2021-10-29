@@ -1,7 +1,7 @@
 name: .NET
 
 on:
-  push:
+  pull_request:
     branches: [ main ]
 
 jobs:
@@ -27,9 +27,3 @@ jobs:
 
     - name: Run tests
       run: dotnet test /p:Configuration=Release --no-restore --no-build --verbosity normal
-
-    - name: Pack
-      run: dotnet pack --configuration Release
-
-    - name: Publish
-      run: dotnet nuget push **\*.nupkg -s 'https://nuget.pkg.github.com/imbatony/index.json' -k ${{secrets.NUGET_TOKEN}}
