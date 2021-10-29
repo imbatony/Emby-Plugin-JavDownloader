@@ -1,4 +1,10 @@
-﻿namespace MediaBrowser.Plugins.JavDownloader.Tasks
+﻿// -----------------------------------------------------------------------
+// <copyright file="JavDownloadTask.cs" author="imbatony">
+//     Copyright (c) JavDownloader.  All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MediaBrowser.Plugins.JavDownloader.Tasks
 {
     using System;
     using System.Collections.Generic;
@@ -138,7 +144,7 @@
                 FolderPath = Plugin.Instance.Configuration.DownloadTargetPath,
                 FileName = $"{e.Num}.mp4"
             }).ToList();
-            total = needDownload.Count();
+            total = needDownload.Select(e => e.Videos.Count).Sum();
             finished = 0;
             logger.Info($"{total} files need Download...");
             await DownloadAll(needDownload);
@@ -177,21 +183,22 @@
             _currentDownloadService.DownloadFileCompleted += OnDownloadFileCompleted;
             _currentDownloadService.DownloadStarted += OnDownloadStarted;
 
-            if(downloadItem.Videos.Count == 1)
+            if (downloadItem.Videos.Count == 1)
             {
                 await _currentDownloadService.DownloadFileTaskAsync(downloadItem.Videos[0].Url, Path.Combine(downloadItem.FolderPath, downloadItem.FileName)).ConfigureAwait(false);
             }
 
             else
             {
-                foreach(var v in downloadItem.Videos)
+                foreach (var v in downloadItem.Videos)
                 {
-                    await _currentDownloadService.DownloadFileTaskAsync(v.Url, Path.Combine(Path.GetTempPath(), $"{downloadItem.Num}-{v.Part}.mp4")).ConfigureAwait(false);
+                    await _currentDownloadService.DownloadFileTaskAsync(v.Url, Path.Combine(downloadItem.FolderPath, $"{downloadItem.Num}-{v.Part}.mp4")).ConfigureAwait(false);
                 }
             }
 
             return _currentDownloadService;
         }
+
 
         /// <summary>
         /// The OnDownloadStarted.

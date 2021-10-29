@@ -102,7 +102,7 @@
                         Type = "download",
                         Num = item.Num,
                         Status = 0,
-                        Url = item.Url,
+                        Videos = item.Videos,
                         Modified = DateTime.UtcNow,
                         Created = DateTime.UtcNow,
                         Quality = item.Quality,
@@ -110,7 +110,7 @@
                     });
                 }
 
-                progress.Report(100);
+                progress.Report(100); 
             }
         }
 
