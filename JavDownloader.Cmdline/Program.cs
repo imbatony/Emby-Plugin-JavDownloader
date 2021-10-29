@@ -307,13 +307,18 @@
             _currentDownloadService.DownloadFileCompleted += OnDownloadFileCompleted;
             _currentDownloadService.DownloadStarted += OnDownloadStarted;
 
-            if (string.IsNullOrWhiteSpace(downloadItem.FileName))
+
+            if (downloadItem.Videos.Count == 1)
             {
-                await _currentDownloadService.DownloadFileTaskAsync(downloadItem.Url, new DirectoryInfo(downloadItem.FolderPath)).ConfigureAwait(false);
+                await _currentDownloadService.DownloadFileTaskAsync(downloadItem.Videos[0].Url, Path.Combine(downloadItem.FolderPath, downloadItem.FileName)).ConfigureAwait(false);
             }
+
             else
             {
-                await _currentDownloadService.DownloadFileTaskAsync(downloadItem.Url, Path.Combine(downloadItem.FolderPath, downloadItem.FileName)).ConfigureAwait(false);
+                foreach (var v in downloadItem.Videos)
+                {
+                    await _currentDownloadService.DownloadFileTaskAsync(v.Url, Path.Combine(downloadItem.FolderPath, $"{downloadItem.Num}-{v.Part}.mp4")).ConfigureAwait(false);
+                }
             }
 
             return _currentDownloadService;

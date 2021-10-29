@@ -96,7 +96,6 @@
             var now = DateTime.UtcNow.AddDays(-10);
             foreach (var item in downloads)
             {
-
                 if (jobs.Exists(e => e.Num == item.Num && e.Created > now))
                 {
                     item.Extras["jobId"] = jobs.FindOne(e => e.Num == item.Num && e.Created > now).id.ToString();
@@ -110,7 +109,7 @@
                         Type = "download",
                         Num = item.Num,
                         Status = 0,
-                        Url = item.Url,
+                        Videos = item.Videos,
                         Modified = DateTime.UtcNow,
                         Created = DateTime.UtcNow,
                         Quality = item.Quality,

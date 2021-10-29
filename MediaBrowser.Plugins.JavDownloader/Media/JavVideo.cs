@@ -25,5 +25,10 @@ namespace MediaBrowser.Plugins.JavDownloader.Media
         /// Gets or sets the Type.
         /// </summary>
         public VideoType Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Part.
+        /// </summary>
+        public string Part { get; set; }
     }
 }
