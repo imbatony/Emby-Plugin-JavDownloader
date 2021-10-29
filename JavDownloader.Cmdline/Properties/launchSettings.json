@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "JavDownloader.Cmdline": {
+      "commandName": "Project",
+      "commandLineArgs": "-d -u https://supjav.com/zh/118598.html"
+    }
+  }
+}

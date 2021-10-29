@@ -5,6 +5,7 @@
 
 namespace MediaBrowser.Plugins.JavDownloader.Tests
 {
+    using MediaBrowser.Plugins.JavDownloader.Logger;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -19,7 +20,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Tests
         [TestMethod()]
         public void PluginTest()
         {
-            var plugin = new Plugin(null, null);
+            var plugin = new Plugin(null, null , new CommandLineLoggerManager());
             Assert.IsNotNull(plugin.GetThumbImage());
         }
 
@@ -30,7 +31,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Tests
         [Ignore]
         public void GetPagesTest()
         {
-            var plugin = new Plugin(null, null);
+            var plugin = new Plugin(null, null, new CommandLineLoggerManager());
             Assert.IsNotNull(plugin.GetPluginInfo());
         }
 
@@ -40,7 +41,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Tests
         [TestMethod()]
         public void GetThumbImageTest()
         {
-            var plugin = new Plugin(null, null);
+            var plugin = new Plugin(null, null, new CommandLineLoggerManager());
             Assert.IsNotNull(plugin.GetThumbImage());
         }
     }

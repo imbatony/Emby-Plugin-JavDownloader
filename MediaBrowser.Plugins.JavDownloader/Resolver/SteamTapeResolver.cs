@@ -2,10 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Threading.Tasks;
+    using System.Web;
     using HtmlAgilityPack;
     using MediaBrowser.Model.Logging;
     using MediaBrowser.Plugins.JavDownloader.Extensions;
@@ -41,13 +40,20 @@
         public override async Task<List<IMedia>> GetMedias(string url)
         {
             var detail = await this.GetHtmlDocument(url);
-            var videoLinkNode = detail.DocumentNode.SelectSingleNode("//div[@id='robotlink']");
-            var videoLink = videoLinkNode.InnerHtml.Replace("/streamtape.com/get_video?", "");
-            videoLink = videoLink.Substring(0, videoLink.IndexOf("token"));
-            var scirpt = detail.Text.Substring(detail.Text.LastIndexOf(videoLink),100);
-            var realtoken = scirpt.Substring(0, scirpt.IndexOf("').substring"));
-            videoLink = $"http://streamtape.com/get_video?{realtoken}&stream=1";
-            simpleMedia.Videos = new List<JavVideo>
+            try
+            {
+                var videoLinkNode = detail.DocumentNode.SelectSingleNode("//div[@id='robotlink']");
+                var videoLink = videoLinkNode.InnerHtml.Replace("/streamtape.com", "https://streamtape.com");
+                var videoUri = new Uri(videoLink);
+                var query = HttpUtility.ParseQueryString(videoUri.Query);
+                var id = query.Get("id");
+                var expires = query.Get("expires");
+                var ip = query.Get("ip");
+                var token = query.Get("token");
+                var tokenLength = token.Length;
+                var realtoken = detail.Text.Substring(detail.Text.LastIndexOf("token"), tokenLength + 6).Substring(6, tokenLength);
+                videoLink = $"http://streamtape.com/get_video?id={id}&expires={expires}&ip={ip}&token={realtoken}&stream=1";
+                simpleMedia.Videos = new List<JavVideo>
             {
                 new JavVideo
                 {
@@ -56,6 +62,12 @@
                     VideoQuality = VideoQuality.p720
                 }
             };
+            }
+            catch (Exception e)
+            {
+                this.logger?.ErrorException("resolve failed", e);
+                this.logger?.Debug(detail.Text);
+            }
 
             return new List<IMedia>
             {
@@ -74,6 +86,5 @@
             req.Headers.Add("referer", simpleMedia.Url);
             return this.httpClientEx.GetHtmlDocumentByReqAsync(req, this.logger);
         }
-
     }
 }

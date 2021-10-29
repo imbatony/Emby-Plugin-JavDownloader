@@ -21,40 +21,40 @@ namespace MediaBrowser.Plugins.JavDownloader.Configuration
         /// <summary>
         /// Gets or sets a value indicating whether EnableExtractionDuringLibraryScan.
         /// </summary>
-        public bool EnableExtractionDuringLibraryScan { get; set; }
+        public bool EnableDownloadTask { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether EnableLocalMediaFolderSaving.
         /// </summary>
-        public bool EnableLocalMediaFolderSaving { get; set; }
+        public string DownloadTargetPath { get; set; }
 
         /// <summary>
         /// Gets or sets the ConfigurationVersion
-        /// 最后修改时间...
+        /// 最后修改时间....
         /// </summary>
         public long ConfigurationVersion { get; set; } = DateTime.Now.Ticks;
 
         /// <summary>
         /// Gets the Version
-        /// 版本信息..
+        /// 版本信息...
         /// </summary>
         public string Version { get; } = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
         /// <summary>
         /// Gets or sets the ProxyType
-        /// 代理服务器类型..
+        /// 代理服务器类型...
         /// </summary>
         public int ProxyType { get; set; } = (int)ProxyTypeEnum.None;
 
         /// <summary>
         /// Gets a value indicating whether EnableJsProxy
-        /// 启用代理..
+        /// 启用代理...
         /// </summary>
         public bool EnableJsProxy => ProxyType == (int)ProxyTypeEnum.JsProxy && JsProxy.IsWebUrl();
 
         /// <summary>
         /// Gets or sets the JsProxy
-        /// JsProxy 代理地址..
+        /// JsProxy 代理地址...
         /// </summary>
         public string JsProxy { get; set; } = "https://j.javscraper.workers.dev/";
 
@@ -70,7 +70,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Configuration
 
         /// <summary>
         /// Gets or sets the JsProxyBypass
-        /// 不走代理的域名..
+        /// 不走代理的域名...
         /// </summary>
         public string JsProxyBypass
         {
@@ -99,43 +99,45 @@ namespace MediaBrowser.Plugins.JavDownloader.Configuration
 
         /// <summary>
         /// Gets or sets the ProxyHost
-        /// 代理服务器：主机..
+        /// 代理服务器：主机...
         /// </summary>
         public string ProxyHost { get; set; } = "127.0.0.1";
 
         /// <summary>
         /// Gets or sets the ProxyPort
-        /// 代理服务器：端口..
+        /// 代理服务器：端口...
         /// </summary>
         public int ProxyPort { get; set; } = 7890;
 
         /// <summary>
         /// Gets or sets the ProxyUserName
-        /// 代理服务器：用户名..
+        /// 代理服务器：用户名...
         /// </summary>
         public string ProxyUserName { get; set; }
 
         /// <summary>
         /// Gets or sets the ProxyPassword
-        /// 代理服务器：密码..
+        /// 代理服务器：密码...
         /// </summary>
         public string ProxyPassword { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether EnableX_FORWARDED_FOR
-        /// 启用 X-FORWARDED-FOR 配置..
+        /// 启用 X-FORWARDED-FOR 配置...
         /// </summary>
         public bool EnableX_FORWARDED_FOR { get; set; } = true;
 
         /// <summary>
         /// Gets or sets the X_FORWARDED_FOR
-        /// X-FORWARDED-FOR IP地址..
+        /// X-FORWARDED-FOR IP地址...
         /// </summary>
         public string X_FORWARDED_FOR { get; set; } = "17.172.224.99";
 
-
+        /// <summary>
+        /// Gets or sets the DownloadPath.
+        /// </summary>
         public string DownloadPath { get; set; } = Environment.GetEnvironmentVariable("JavDownloaderDownloadPath") ?? Path.GetTempPath();
-}
+    }
 
     /// <summary>
     /// 代理类型

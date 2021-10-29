@@ -10,6 +10,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
     using MediaBrowser.Model.Logging;
     using MediaBrowser.Plugins.JavDownloader.Configuration;
     using MediaBrowser.Plugins.JavDownloader.Http;
+    using MediaBrowser.Plugins.JavDownloader.Logger;
     using MediaBrowser.Plugins.JavDownloader.Resolver;
     using MediaBrowser.Plugins.JavDownloader.Tests;
     using MediaBrowser.Plugins.JavDownloaderTests;
@@ -62,8 +63,8 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
         public void GetMediasTest2()
         {
             var conf = new PluginConfiguration();
-            Plugin plugin = new Plugin(new TestIApplicationPaths(), new NopeXMl(conf));
-            plugin.SetTestConf(conf);
+            Plugin plugin = new Plugin(new TestIApplicationPaths(), new NopeXMl(conf),new CommandLineLoggerManager());
+            plugin.SetConf(conf);
             var resolver = new SuperJavDetailResolver(new HttpClientEx(), new Mock<ILogger>().Object);
             var medias = resolver.GetMedias("https://supjav.com/zh/118580.html").Result;
             Assert.IsNotNull(medias);
@@ -78,8 +79,8 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
         public void GetMediasTest3()
         {
             var conf = new PluginConfiguration();
-            Plugin plugin = new Plugin(new TestIApplicationPaths(), new NopeXMl(conf));
-            plugin.SetTestConf(conf);
+            Plugin plugin = new Plugin(new TestIApplicationPaths(), new NopeXMl(conf), new CommandLineLoggerManager());
+            plugin.SetConf(conf);
             var resolver = new SuperJavProvider("https://supjav.com", new Mock<ILogger>().Object);
             var medias = resolver.GetTodayPopular().Result;
             Assert.IsNotNull(medias);

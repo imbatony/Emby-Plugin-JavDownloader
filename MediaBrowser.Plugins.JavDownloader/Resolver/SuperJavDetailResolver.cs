@@ -13,6 +13,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Resolver
     using MediaBrowser.Plugins.JavDownloader.Extensions;
     using MediaBrowser.Plugins.JavDownloader.Http;
     using MediaBrowser.Plugins.JavDownloader.Media;
+    using MediaBrowser.Plugins.JavDownloader.Utils.Emby.Plugins.JavScraper;
 
     /// <summary>
     /// Defines the <see cref="SuperJavDetailResolver" />.
@@ -62,17 +63,19 @@ namespace MediaBrowser.Plugins.JavDownloader.Resolver
 
                 return list;
             }
-            else
+            else if(streamtapes.Any())
             {
                 var media = new SimpleMedia
                 {
                     Title = title,
-                    Num = title.ExtractKey(),
+                    Num = JavIdRecognizer.Parse(title),
                     Url = url,
                     Provider = "SuperJav",
                     Part = "1"
                 };
                 return new SteamTapeResolver(httpClientEx, logger, media).GetMedias(streamtapes[0]).Result;
+            }else{
+                return new List<IMedia>();
             }
             
         }

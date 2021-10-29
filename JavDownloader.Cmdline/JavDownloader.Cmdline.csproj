@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <Description>javdownloader</Description>
+    <ToolCommandName>javd</ToolCommandName>
+    <Version>1.$([System.DateTime]::Now.ToString(yyyy.MMdd.HHmm))</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <PackAsTool>true</PackAsTool>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Downloader" Version="2.2.9" />
+    <PackageReference Include="Furion.Tools.CommandLine" Version="2.19.0" />
+    <PackageReference Include="ShellProgressBar" Version="5.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MediaBrowser.Plugins.JavDownloader\MediaBrowser.Plugins.JavDownloader.csproj" />
+  </ItemGroup>
+
+</Project>

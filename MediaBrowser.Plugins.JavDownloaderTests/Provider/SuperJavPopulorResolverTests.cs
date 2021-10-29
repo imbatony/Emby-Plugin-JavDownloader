@@ -8,6 +8,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
 {
     using System.Linq;
     using MediaBrowser.Plugins.JavDownloader.Http;
+    using MediaBrowser.Plugins.JavDownloader.Logger;
     using MediaBrowser.Plugins.JavDownloader.Resolver;
     using MediaBrowser.Plugins.JavDownloaderTests;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -50,7 +51,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
         [TestMethod()]
         public void ResolveTest()
         {
-            new Plugin(null, null);
+            new Plugin(null, null, new CommandLineLoggerManager());
             var list = this.resolver.Resolve().Result;
             Assert.IsNotNull(list);
             Assert.AreEqual(24, list.Count());

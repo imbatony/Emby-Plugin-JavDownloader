@@ -1,39 +1,55 @@
 ﻿namespace MediaBrowser.Plugins.JavDownloader.Media
 {
-    using System;
     using System.Collections.Generic;
-    using System.Text;
 
-    public class SimpleMedia :IMedia
+    /// <summary>
+    /// Defines the <see cref="SimpleMedia" />.
+    /// </summary>
+    public class SimpleMedia : IMedia
     {
+        public SimpleMedia()
+        {
+            Extras = new Dictionary<string, string>();
+        }
         /// <summary>
-        /// Gets the Url.
+        /// Gets or sets the Url
+        /// Gets the Url..
         /// </summary>
         public string Url { get; set; }
 
         /// <summary>
-        /// Gets the Num.
+        /// Gets or sets the Num
+        /// Gets the Num..
         /// </summary>
         public string Num { get; set; }
 
         /// <summary>
-        /// Gets the Title.
+        /// Gets or sets the Title
+        /// Gets the Title..
         /// </summary>
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets the Provider.
+        /// Gets or sets the Provider
+        /// Gets the Provider..
         /// </summary>
         public string Provider { get; set; }
 
         /// <summary>
-        /// Gets the Provider.
+        /// Gets or sets the Part
+        /// Gets the Provider..
         /// </summary>
         public string Part { get; set; }
 
         /// <summary>
-        /// Gets the Videos.
+        /// Gets or sets the Videos
+        /// Gets the Videos..
         /// </summary>
         public List<JavVideo> Videos { get; set; }
+
+        /// <summary>
+        /// Gets the Extras.
+        /// </summary>
+        public Dictionary<string, string> Extras { get; set; }
     }
 }

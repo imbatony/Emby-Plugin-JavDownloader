@@ -11,9 +11,12 @@ namespace MediaBrowser.Plugins.JavDownloader
     using MediaBrowser.Common.Configuration;
     using MediaBrowser.Common.Plugins;
     using MediaBrowser.Model.Drawing;
+    using MediaBrowser.Model.Logging;
     using MediaBrowser.Model.Plugins;
     using MediaBrowser.Model.Serialization;
     using MediaBrowser.Plugins.JavDownloader.Configuration;
+    using MediaBrowser.Plugins.JavDownloader.Data;
+    using MediaBrowser.Plugins.JavDownloader.Provider;
 
     /// <summary>
     /// Defines the <see cref="Plugin" />.
@@ -25,10 +28,28 @@ namespace MediaBrowser.Plugins.JavDownloader
         /// </summary>
         /// <param name="applicationPaths">The applicationPaths<see cref="IApplicationPaths"/>.</param>
         /// <param name="xmlSerializer">The xmlSerializer<see cref="IXmlSerializer"/>.</param>
-        public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer) : base(applicationPaths, xmlSerializer)
+        /// <param name="logManager">The logManager<see cref="ILogManager"/>.</param>
+        public Plugin(
+            IApplicationPaths applicationPaths,
+            IXmlSerializer xmlSerializer,
+            ILogManager logManager
+            ) : base(applicationPaths, xmlSerializer)
         {
             Instance = this;
+            logger = logManager.GetLogger("Plugin");
+            logger?.Info($"{Name} - Loaded.");
+            DB = ApplicationDbContext.Create(applicationPaths);
+            this.javProvider = new CompositeJavProvider(new List<IJavProvider>
+            {
+                new SuperJavProvider("https://supjav.com",logManager.GetLogger("superjav"))
+            });
         }
+
+        /// <summary>
+        /// Gets the DB
+        /// 数据库..
+        /// </summary>
+        public ApplicationDbContext DB { get; private set; }
 
         /// <summary>
         /// The GetPages.
@@ -41,7 +62,11 @@ namespace MediaBrowser.Plugins.JavDownloader
                 new PluginPageInfo
                 {
                     Name = "JavDownloader",
-                    EmbeddedResourcePath = GetType().Namespace + ".Configuration.configPage.html"
+                    EmbeddedResourcePath = GetType().Namespace + ".Configuration.configPage.html",
+                    EnableInMainMenu =true,
+                    MenuSection = "server",
+                    MenuIcon = "theaters",
+                    DisplayName = "Jav Downloader",
                 }
             };
         }
@@ -60,9 +85,14 @@ namespace MediaBrowser.Plugins.JavDownloader
         }
 
         /// <summary>
+        /// 名称..
+        /// </summary>
+        public const string NAME = "JavDownloader";
+
+        /// <summary>
         /// Gets the Name.
         /// </summary>
-        public override string Name => "JavDownloader";
+        public override string Name => NAME;
 
         /// <summary>
         /// Gets the Description.
@@ -90,7 +120,11 @@ namespace MediaBrowser.Plugins.JavDownloader
             }
         }
 
-        public void SetTestConf(PluginConfiguration configuration)
+        /// <summary>
+        /// The SetTestConf.
+        /// </summary>
+        /// <param name="configuration">The configuration<see cref="PluginConfiguration"/>.</param>
+        public void SetConf(PluginConfiguration configuration)
         {
             this.Configuration = configuration;
         }
@@ -99,5 +133,24 @@ namespace MediaBrowser.Plugins.JavDownloader
         /// Gets the Instance.
         /// </summary>
         public static Plugin Instance { get; private set; }
+
+        /// <summary>
+        /// Defines the logger.
+        /// </summary>
+        private readonly ILogger logger;
+
+        /// <summary>
+        /// Gets the javProvider.
+        /// </summary>
+        public CompositeJavProvider javProvider { get; private set; }
+
+        /// <summary>
+        /// The SaveConfiguration.
+        /// </summary>
+        public override void SaveConfiguration()
+        {
+            Configuration.ConfigurationVersion = DateTime.Now.Ticks;
+            base.SaveConfiguration();
+        }
     }
 }

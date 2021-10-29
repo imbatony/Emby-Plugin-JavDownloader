@@ -75,5 +75,40 @@ namespace MediaBrowser.Plugins.JavDownloader.Media
                 return VideoQuality.unknown;
             }
         }
+
+        public static string ToString(VideoQuality quality)
+        {
+            var content = "";
+            switch (quality)
+            {
+                case VideoQuality.unknown:
+                    content = "U";
+                    break;
+                case VideoQuality.p360:
+                    content = "360P";
+                    break;
+                case VideoQuality.p480:
+                    content = "480P";
+                    break;
+                case VideoQuality.p720:
+                    content = "720P";
+                    break;
+                case VideoQuality.p1080:
+                    content = "1080P";
+                    break;
+                case VideoQuality.p2k:
+                    content = "2K";
+                    break;
+                case VideoQuality.p4k:
+                    content = "4K";
+                    break;
+                case VideoQuality.over4k:
+                    content = "8K";
+                    break;
+                default:
+                    break;
+            }
+            return content;
+        }
     }
 }

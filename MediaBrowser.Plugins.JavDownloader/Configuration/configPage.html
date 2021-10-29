@@ -1,38 +1,130 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Jav Downloader</title>
+    <title>Jav Downloader配置</title>
 </head>
 <body>
-    <div data-role="page" class="page type-interior pluginConfigurationPage rokuConfigurationPage" data-require="emby-button,emby-select,emby-checkbox,emby-linkbutton">
+    <div data-role="page" class="page type-interior pluginConfigurationPage JavDownloaderConfigurationPage" data-require="emby-input,emby-button,emby-select,emby-checkbox,emby-linkbutton,emby-collapse">
 
         <div data-role="content">
             <div class="content-primary">
-
-                <form class="rokuConfigurationForm">
-
-                    <div class="checkboxContainer checkboxContainer-withDescription">
-                        <label>
-                            <input is="emby-checkbox" type="checkbox" id="chkSaveBifLocal" />
-                            <span>Save thumbnail files within media folders</span>
-                        </label>
-                        <div class="fieldDescription checkboxFieldDescription">This will enable easier storage management of the thumbnail files. Thumbnail files will be saved with a .bif extension.</div>
+                <div class="verticalSection verticalSection">
+                    <div class="sectionTitleContainer flex align-items-center">
+                        <h2 class="sectionTitle">JavDownloader 配置</h2><span id="current_version" name="current_version" is="emby-linkbutton" class="emby-button"></span>
+                        <a is="emby-linkbutton" class="raised button-alt headerHelpButton emby-button" target="_blank" href="https://github.com/imbatony/Emby-Plugin-JavDownloader">帮助</a>
+                        <a is="emby-linkbutton" class="raised button-alt headerHelpButton emby-button" target="_blank" href="https://github.com/imbatony/Emby-Plugin-JavDownloader">源码</a>
                     </div>
+                </div>
 
-                    <div class="checkboxContainer checkboxContainer-withDescription">
-                        <label>
-                            <input is="emby-checkbox" type="checkbox" id="chkEnableDuringScan" />
-                            <span>Create thumbnails when videos are discovered</span>
-                        </label>
-                        <div class="fieldDescription checkboxFieldDescription">This will make thumbnails available sooner but will result in longer library scans. Thumbnails are also created during a scheduled task.</div>
-                        <div class="fieldDescription checkboxFieldDescription">To configure the scheduled task, see <a is="emby-linkbutton" class="button-link" href="scheduledtasks.html">scheduled tasks</a>.</div>
-                    </div>
+                <div class="readOnlyContent">
+                    <p class="description1">
+                        日本电影下载插件，用于从某些网站下载影片信息。
+                        <a is="emby-linkbutton" target="_blank" href="https://github.com/imbatony/Emby-Plugin-JavDownloader" class="button-link emby-button">了解更多</a>
+                    </p>
+                </div>
+                <form class="JavDownloaderConfigurationForm">
+                    <fieldset class="verticalSection verticalSection-extrabottompadding">
+                        <legend><h3>代理服务器</h3></legend>
 
-                    <br />
+                        <div class="selectContainer">
+                            <label class="selectLabel" for="selectProxyType">代理服务器类型：</label>
+                            <select is="emby-select" id="selectProxyType" name="selectProxyType" label="代理服务器类型：" class="selectProxyType emby-select-withcolor emby-select">
+                                <option value="-1">禁用</option>
+                                <option value="0">JsProxy</option>
+                                <option value="1">HTTP</option>
+                                <option value="2">HTTPS</option>
+                                <option value="3">Socks5</option>
+                            </select>
+                            <div class="selectArrowContainer">
+                                <div style="visibility:hidden;display:none;">0</div>
+                                <span class="selectArrow material-icons keyboard_arrow_down"></span>
+                            </div>
+                        </div>
+
+                        <div id="selectProxyTypeJsProxy" name="selectProxyTypeJsProxy" class="selectProxyTypeJsProxy">
+                            <div class="inputContainer">
+                                <label class="inputLabel inputLabel-float inputLabelUnfocused" for="txtJsProxy">修改版 JsProxy 代理地址:</label>
+                                <input is="emby-input" type="url" id="txtJsProxy" name="txtJsProxy" class="emby-input">
+                                <div class="fieldDescription">
+                                    您需要使用 <a is="emby-linkbutton" href="https://workers.cloudflare.com" target="_blank" class="button-link emby-button">CloudFlare Workers</a> 部署修改版 JsProxy 代理服务，
+                                    <a is="emby-linkbutton" target="_blank" href="https://github.com/JavScraper/Emby.Plugins.JavScraper/tree/master/cf-worker" class="button-link emby-button">了解更多</a>
+                                </div>
+                            </div>
+                            <div class="inputContainer">
+                                <label class="inputLabel inputLabel-float inputLabelUnfocused" for="txtJsProxyBypass">不走代理的域名:</label>
+                                <input is="emby-input" type="text" id="txtJsProxyBypass" name="txtJsProxyBypass" class="emby-input">
+                                <div class="fieldDescription">采用关键字匹配方式，多个域名使用逗号隔开。</div>
+                            </div>
+                        </div>
+
+                        <div id="selectProxyTypeProxy" name="selectProxyTypeProxy" class="selectProxyTypeProxy">
+                            <div class="inputContainer">
+                                <label class="inputLabel inputLabel-float inputLabelUnfocused" for="txtProxyHost">服务器:</label>
+                                <input is="emby-input" id="txtProxyHost" name="txtProxyHost" class="emby-input" label="服务器：">
+                            </div>
+                            <div class="inputContainer">
+                                <label class="inputLabel inputLabel-float inputLabelUnfocused" for="txtProxyPort">端口:</label>
+                                <input is="emby-input" type="number" id="txtProxyPort" name="txtProxyPort" label="端口：" pattern="[0-9]*" required="required" min="1" max="65535" class="emby-input">
+                            </div>
+                            <div class="inputContainer">
+                                <label class="inputLabel inputLabel-float inputLabelUnfocused" for="txtProxyUserName">用户名:</label>
+                                <input is="emby-input" id="txtProxyUserName" name="txtProxyUserName" class="emby-input" label="用户名：">
+                            </div>
+
+                            <div class="inputContainer">
+                                <label class="inputLabel inputLabel-float inputLabelUnfocused" for="txtProxyPassword">密码:</label>
+                                <input is="emby-input" id="txtProxyPassword" name="txtProxyPassword" class="emby-input" label="密码：">
+                            </div>
+
+                            <div class="fieldDescription">
+                                用户名和密码，可以为空。
+                            </div>
+                        </div>
+
+                        <br>
+                        <div>
+                            <div class="checkboxContainer checkboxContainer-withDescription">
+                                <label>
+                                    <input type="checkbox" is="emby-checkbox" id="chkEnableX_FORWARDED_FOR">
+                                    <span>增加 X-FORWARDED-FOR HTTP 请求头</span>
+                                </label>
+                                <div class="fieldDescription checkboxFieldDescription"></div>
+                            </div>
+
+                            <div class="inputContainer">
+                                <label class="inputLabel inputLabel-float inputLabelUnfocused" for="txtX_FORWARDED_FOR">X-FORWARDED-FOR IP地址：</label>
+                                <input is="emby-input" id="txtX_FORWARDED_FOR" name="txtX_FORWARDED_FOR" class="emby-input" label="X-FORWARDED-FOR IP地址：">
+                            </div>
+
+                            <div class="fieldDescription">增加 X-FORWARDED-FOR HTTP 请求头的作用在于伪造来源IP地址，以突破区域限制。常用同一个也可能导致被封锁。这个功能仅部分网站有效。</div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="verticalSection verticalSection-extrabottompadding">
+                        <legend><h3>下载设置</h3></legend>
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label>
+                                <input type="checkbox" is="emby-checkbox" id="chkEnableDownloadTask" />
+                                <span>是否开启定期下载</span>
+                            </label>
+                            <div class="fieldDescription checkboxFieldDescription"></div>
+                        </div>
+                        <div class="inputContainer">
+                            <div style="display:flex; align-items:center;">
+                                <div style="flex-grow:1;">
+                                    <input is="emby-input" id="txtDownloadTargetPath" type="text" label="目标文件夹:" required / ="">
+                                    <div class="fieldDescription">电影文件将被下载到该文件夹内。</div>
+                                </div>
+                                <button type="button" is="paper-icon-button-light" id="btnSelectDownloadTargetPath" title="选择文件夹" class="autoSize"><span class="material-icons search"></span></button>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <br>
+
                     <div>
-                        <button is="emby-button" type="submit" class="raised button-submit block"><span>Save</span></button>
+                        <button is="emby-button" type="submit" class="raised button-submit block emby-button"><span>保存</span></button>
                     </div>
                 </form>
+
             </div>
         </div>
 
@@ -41,23 +133,68 @@
             (function () {
 
                 var pluginId = "0B58AD46-DEE3-495D-B8C4-AA0A0CD2A83F";
+                $('.selectProxyType').on('change', function (e) {
+                    if (this.value < 0) {
+                        $('.selectProxyTypeJsProxy').css('display', 'none');
+                        $('.selectProxyTypeProxy').css('display', 'none');
+                    } else if (this.value == 0) {
+                        $('.selectProxyTypeJsProxy').css('display', 'inherit');
+                        $('.selectProxyTypeProxy').css('display', 'none');
+                    } else {
+                        $('.selectProxyTypeJsProxy').css('display', 'none');
+                        $('.selectProxyTypeProxy').css('display', 'inherit');
+                    }
+                });
+                $('#btnSelectDownloadTargetPath').on('click', function (e) {
+                    var view = this.parentElement;
+                    require(['directorybrowser'], function (directoryBrowser) {
+                        var picker = new directoryBrowser();
+                        picker.show({
 
-                $('.rokuConfigurationPage').on('pageshow', function (event) {
+                            callback: function (path) {
+
+                                if (path) {
+                                    view.querySelector('#txtDownloadTargetPath').value = path;
+                                }
+                                picker.close();
+                            },
+                            header: '选择目标文件夹',
+                            validateWriteable: true
+                        });
+                    });
+                });
+
+                $('.JavDownloaderConfigurationPage').on('pageshow', function (event) {
 
                     var page = this;
 
                     Dashboard.showLoadingMsg();
 
                     ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                        $('#current_version', page).text("v" + config.Version);
 
-                        page.querySelector('#chkEnableDuringScan').checked = config.EnableExtractionDuringLibraryScan;
-                        page.querySelector('#chkSaveBifLocal').checked = config.EnableLocalMediaFolderSaving;
+                        //page.querySelector('#chkEnableJsProxy').checked = config.EnableJsProxy;
+                        $('#txtJsProxy', page).val(config.JsProxy).change();
+                        $('#txtJsProxyBypass', page).val(config.JsProxyBypass).change();
+
+                        $('#txtProxyHost', page).val(config.ProxyHost).change();
+                        $('#txtProxyPort', page).val(config.ProxyPort).change();
+                        $('#txtProxyUserName', page).val(config.ProxyUserName).change();
+                        $('#txtProxyPassword', page).val(config.ProxyPassword).change();
+
+                        $('#selectProxyType', page).val(config.ProxyType).change();
+
+                        page.querySelector('#chkEnableX_FORWARDED_FOR').checked = config.EnableX_FORWARDED_FOR;
+                        $('#txtX_FORWARDED_FOR', page).val(config.X_FORWARDED_FOR).change();
+
+                        page.querySelector('#chkEnableDownloadTask').checked = config.EnableDownloadTask;
+                        page.querySelector('#txtDownloadTargetPath').value = config.DownloadTargetPath || '';                        
 
                         Dashboard.hideLoadingMsg();
                     });
                 });
 
-                $('.rokuConfigurationForm').off('submit.plugin').on('submit.plugin', function (e) {
+                $('.JavDownloaderConfigurationForm').on('submit', function (e) {
 
                     Dashboard.showLoadingMsg();
 
@@ -65,9 +202,19 @@
 
                     ApiClient.getPluginConfiguration(pluginId).then(function (config) {
 
-                        config.EnableExtractionDuringLibraryScan = form.querySelector('#chkEnableDuringScan').checked;
+                        config.ProxyType = $('#selectProxyType', form).val();
+                        config.JsProxy = $('#txtJsProxy', form).val();
+                        config.JsProxyBypass = $('#txtJsProxyBypass', form).val();
 
-                        config.EnableLocalMediaFolderSaving = form.querySelector('#chkSaveBifLocal').checked;
+                        config.ProxyHost = $('#txtProxyHost', form).val();
+                        config.ProxyPort = $('#txtProxyPort', form).val();
+                        config.ProxyUserName = $('#txtProxyUserName', form).val();
+                        config.ProxyPassword = $('#txtProxyPassword', form).val();
+
+                        config.EnableX_FORWARDED_FOR = $('#chkEnableX_FORWARDED_FOR').prop('checked');
+                        config.X_FORWARDED_FOR = $('#txtX_FORWARDED_FOR', form).val();
+                        config.EnableDownloadTask = $('#chkEnableDownloadTask').prop('checked');
+                        config.DownloadTargetPath = $('#txtDownloadTargetPath', form).val();
 
                         ApiClient.updatePluginConfiguration(pluginId, config).then(Dashboard.processPluginConfigurationUpdateResult);
                     });

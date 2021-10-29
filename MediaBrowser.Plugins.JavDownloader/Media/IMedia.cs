@@ -42,5 +42,10 @@ namespace MediaBrowser.Plugins.JavDownloader.Media
         /// Gets the Videos.
         /// </summary>
         List<JavVideo> Videos { get; }
+
+        /// <summary>
+        /// Gets the Extras.
+        /// </summary>
+        Dictionary<string, string> Extras{ get; }
     }
 }
