@@ -7,6 +7,7 @@
 namespace MediaBrowser.Plugins.JavDownloader.Media
 {
     using System.Collections.Generic;
+    using MediaBrowser.Plugins.JavDownloader.Job;
 
     /// <summary>
     /// Defines the <see cref="IMedia" />.
@@ -19,11 +20,6 @@ namespace MediaBrowser.Plugins.JavDownloader.Media
         string Url { get; }
 
         /// <summary>
-        /// Gets the Num.
-        /// </summary>
-        string Num { get; }
-
-        /// <summary>
         /// Gets the Title.
         /// </summary>
         string Title { get; }
@@ -34,13 +30,14 @@ namespace MediaBrowser.Plugins.JavDownloader.Media
         string Provider { get; }
 
         /// <summary>
-        /// Gets the Videos.
-        /// </summary>
-        List<JavVideo> Videos { get; }
-
-        /// <summary>
         /// Gets the Extras.
         /// </summary>
-        Dictionary<string, string> Extras{ get; }
+        Dictionary<string, string> Extras { get; }
+
+        /// <summary>
+        /// The CreateDownloadJob.
+        /// </summary>
+        /// <returns>The <see cref="Job"/>.</returns>
+        IJob CreateDownloadJob();
     }
 }

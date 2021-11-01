@@ -10,20 +10,12 @@
     public class ApplicationDbContext : LiteDatabase
     {
         /// <summary>
-        /// Gets the Jobs
-        /// 任务列表.
-        /// </summary>
-        public ILiteCollection<Job> Jobs { get; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext"/> class.
         /// </summary>
         /// <param name="connectionString">.</param>
         public ApplicationDbContext(string connectionString)
             : base(connectionString)
         {
-            Jobs = GetCollection<Job>("Jobs");
-            Jobs.EnsureIndex(o => o.Num);
         }
 
         /// <summary>

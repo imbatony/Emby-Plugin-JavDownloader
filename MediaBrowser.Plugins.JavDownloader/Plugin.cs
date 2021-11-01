@@ -38,7 +38,8 @@ namespace MediaBrowser.Plugins.JavDownloader
             Instance = this;
             logger = logManager.GetLogger("Plugin");
             logger?.Info($"{Name} - Loaded.");
-            DB = ApplicationDbContext.Create(applicationPaths);
+            var db = ApplicationDbContext.Create(applicationPaths);
+            this.JobRepository = new JobRepository(db);
             this.javProvider = new CompositeJavProvider(new List<IJavProvider>
             {
                 new SuperJavProvider("https://supjav.com",logManager.GetLogger("superjav"))
@@ -49,7 +50,7 @@ namespace MediaBrowser.Plugins.JavDownloader
         /// Gets the DB
         /// 数据库..
         /// </summary>
-        public ApplicationDbContext DB { get; private set; }
+        public JobRepository JobRepository { get; private set; }
 
         /// <summary>
         /// The GetPages.

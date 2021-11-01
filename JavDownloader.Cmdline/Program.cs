@@ -6,6 +6,7 @@
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Reflection;
     using System.Threading;
@@ -133,8 +134,8 @@
                 medias = Plugin.Instance.javProvider.Resolve(Url).Result;
             }
 
-
-            var downloadList = DownloadItem.FromMedias(medias, TargetPath ?? Directory.GetCurrentDirectory());
+            var downloadMedias = medias.Where(e => e is SimpleMedia).Select(e=> e as SimpleMedia).ToList();
+            var downloadList = DownloadItem.FromMedias(downloadMedias, TargetPath ?? Directory.GetCurrentDirectory());
 
             try
             {

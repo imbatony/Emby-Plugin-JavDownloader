@@ -26,6 +26,7 @@
     <PackageReference Include="MediaBrowser.Server.Core" Version="4.6.0.50-*" Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='Release'" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.Memory" Version="4.5.4" />
+    <PackageReference Include="YoutubeDLSharp" Version="0.4.0" />
   </ItemGroup>
   
   <ItemGroup>

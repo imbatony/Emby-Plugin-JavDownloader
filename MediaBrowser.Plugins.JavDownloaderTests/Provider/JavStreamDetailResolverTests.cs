@@ -52,7 +52,6 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
             var result = resolver.GetMedias("https://javstream.top/v/4y0q4az66m7gk3e#supjav.com@dvdms-433-1.mp4").Result;
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(3, result[0].Videos.Count);
         }
 
         /// <summary>

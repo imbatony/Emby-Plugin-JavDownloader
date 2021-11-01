@@ -19,6 +19,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Tasks
     using MediaBrowser.Model.Logging;
     using MediaBrowser.Model.Tasks;
     using MediaBrowser.Plugins.JavDownloader.Data;
+    using MediaBrowser.Plugins.JavDownloader.Job;
 
     /// <summary>
     /// Defines the <see cref="JavResolveTask" />.
@@ -31,9 +32,9 @@ namespace MediaBrowser.Plugins.JavDownloader.Tasks
         private readonly ILogger logger;
 
         /// <summary>
-        /// Defines the jobs.
+        /// Defines the jobRepository.
         /// </summary>
-        private readonly ILiteCollection<Job> jobs;
+        private readonly JobRepository jobRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JavDownloadTask"/> class.
@@ -44,7 +45,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Tasks
             )
         {
             logger = logManager.GetLogger("JavDownloadTask");
-            this.jobs = Plugin.Instance.DB.Jobs;
+            this.jobRepository = Plugin.Instance.JobRepository;
         }
 
         /// <summary>
@@ -108,11 +109,6 @@ namespace MediaBrowser.Plugins.JavDownloader.Tasks
         private string curNum;
 
         /// <summary>
-        /// Defines the currentPercentage.
-        /// </summary>
-        private double currentPercentage;
-
-        /// <summary>
         /// The Execute.
         /// </summary>
         /// <param name="cancellationToken">The cancellationToken<see cref="CancellationToken"/>.</param>
@@ -130,7 +126,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Tasks
                 return;
             }
             var now = DateTime.UtcNow.AddDays(-1);
-            var jobs = this.jobs.Find(j => j.Created >= now && j.Type == "download" && j.Status == 0, 0, 10);
+            var jobs = this.jobRepository.GetJobs<DownloadJob>(j => j.Created >= now && j.Type == "download" && j.Status == 0, 0, 10);
             if (!jobs.Any())
             {
                 logger.Info($"No file need to download...");
@@ -199,7 +195,6 @@ namespace MediaBrowser.Plugins.JavDownloader.Tasks
             return _currentDownloadService;
         }
 
-
         /// <summary>
         /// The OnDownloadStarted.
         /// </summary>
@@ -218,9 +213,9 @@ namespace MediaBrowser.Plugins.JavDownloader.Tasks
         private void OnDownloadFileCompleted(object sender, AsyncCompletedEventArgs args)
         {
             logger.Info($"{curNum} done");
-            var job = this.jobs.FindOne(e => e.Num == curNum);
+            var job = this.jobRepository.GetJob<DownloadJob>(curNum);
             job.Status = 1;
-            this.jobs.Update(job);
+            this.jobRepository.UpsertJob(job);
             finished++;
             this.progress.Report(100 * finished / total);
         }
@@ -233,7 +228,6 @@ namespace MediaBrowser.Plugins.JavDownloader.Tasks
         private void OnDownloadProgressChanged(object sender, Downloader.DownloadProgressChangedEventArgs e)
         {
             var percent = e.ProgressPercentage / total;
-            this.currentPercentage = e.ProgressPercentage;
             this.progress.Report(100 * finished / total + percent);
         }
 
