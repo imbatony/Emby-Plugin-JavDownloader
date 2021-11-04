@@ -10,8 +10,10 @@ namespace MediaBrowser.Plugins.JavDownloader.Data
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Threading.Tasks;
     using LiteDB;
     using MediaBrowser.Plugins.JavDownloader.Job;
+    using MediaBrowser.Plugins.JavDownloader.Utils;
 
     /// <summary>
     /// Defines the <see cref="JobRepository" />.
@@ -89,6 +91,92 @@ namespace MediaBrowser.Plugins.JavDownloader.Data
                 t.FromModel(j);
                 return t;
             }).ToList();
+        }
+
+        /// <summary>
+        /// The Count.
+        /// </summary>
+        /// <param name="conditionPredicates">The conditionPredicates.</param>
+        /// <returns>The <see cref="Task"/>.</returns>
+        public int Count(params (bool condition, Expression<Func<JobModel, bool>> expression)[] conditionPredicates)
+        {
+            var exp = this.MergeExp(conditionPredicates);
+            return this.downloadJobs.Count(exp);
+        }
+
+        /// <summary>
+        /// The MergeExp.
+        /// </summary>
+        /// <param name="conditionPredicates">The conditionPredicates<see cref="(bool condition, Expression{Func{JobModel, bool}} expression)[]"/>.</param>
+        /// <returns>The <see cref="Expression{Func{JobModel, bool}}"/>.</returns>
+        private Expression<Func<JobModel, bool>> MergeExp(params (bool condition, Expression<Func<JobModel, bool>> expression)[] conditionPredicates)
+        {
+            Expression<Func<JobModel, bool>> exp = (e) => true;
+            if (conditionPredicates != null && conditionPredicates.Any())
+            {
+                foreach ((bool condition, Expression<Func<JobModel, bool>> expression) c in conditionPredicates)
+                {
+                    if (c.condition)
+                    {
+                        exp = exp.And(c.expression);
+                    }
+                }
+            }
+            return exp;
+        }
+
+        /// <summary>
+        /// The BuildPageList.
+        /// </summary>
+        /// <param name="totalCount">The totalCount<see cref="int"/>.</param>
+        /// <param name="pageIndex">The pageIndex<see cref="int"/>.</param>
+        /// <param name="pageSize">The pageSize<see cref="int"/>.</param>
+        /// <param name="items">The items<see cref="IEnumerable{TEntity}"/>.</param>
+        /// <returns>The <see cref="PagedList{TEntity}"/>.</returns>
+        private PagedList<T> BuildPageList<T>(int totalCount, int pageIndex, int pageSize, IEnumerable<T> items) where T : new()
+        {
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+            return new PagedList<T>
+            {
+                TotalCount = totalCount,
+                Items = items,
+                TotalPages = totalPages,
+                HasNextPages = pageIndex < totalPages,
+                HasPrevPages = pageIndex > 1,
+                PageIndex = 1,
+                PageSize = pageSize
+            };
+        }
+
+        /// <summary>
+        /// The GetPagedList.
+        /// </summary>
+        /// <typeparam name="T">.</typeparam>
+        /// <param name="pageIndex">The pageIndex<see cref="int"/>.</param>
+        /// <param name="pageSize">The pageSize<see cref="int"/>.</param>
+        /// <param name="conditionPredicates">The predicate.</param>
+        /// <returns>The <see cref="Task"/>.</returns>
+        public PagedList<T> GetPagedList<T>(int pageIndex, int pageSize, params (bool condition, Expression<Func<JobModel, bool>> expression)[] conditionPredicates) where T : IJob, new()
+        {
+            var totalCount = this.Count(conditionPredicates);
+            var exp = this.MergeExp(conditionPredicates);
+            var jobs = this.GetJobs<T>(exp, (pageIndex - 1) * pageSize, pageSize);
+            return BuildPageList(totalCount, pageIndex, pageSize, jobs);
+        }
+
+        /// <summary>
+        /// The GetPagedList.
+        /// </summary>
+        /// <param name="pageIndex">The pageIndex<see cref="int"/>.</param>
+        /// <param name="pageSize">The pageSize<see cref="int"/>.</param>
+        /// <param name="conditionPredicates">The predicate.</param>
+        /// <returns>The <see cref="Task"/>.</returns>
+        public PagedList<JobModel> GetPagedList(int pageIndex, int pageSize, params (bool condition, Expression<Func<JobModel, bool>> expression)[] conditionPredicates)
+        {
+            var totalCount = this.Count(conditionPredicates);
+            var exp = this.MergeExp(conditionPredicates);
+            var jobs = this.downloadJobs.Find(exp, (pageIndex - 1) * pageSize, pageSize);
+            return BuildPageList(totalCount, pageIndex, pageSize, jobs);
         }
     }
 }

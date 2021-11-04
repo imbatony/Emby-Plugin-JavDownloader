@@ -16,18 +16,12 @@
         private readonly List<IJavProvider> providers;
 
         /// <summary>
-        /// Defines the equlity.
-        /// </summary>
-        private readonly MediaEqualityComparer equlity;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="CompositeJavProvider"/> class.
         /// </summary>
         /// <param name="providers">The providers<see cref="List{IJavProvider}"/>.</param>
         public CompositeJavProvider(List<IJavProvider> providers)
         {
             this.providers = providers;
-            this.equlity = new MediaEqualityComparer();
         }
 
         /// <summary>
@@ -41,7 +35,7 @@
         /// <returns>The <see cref="Task{List{IMedia}}"/>.</returns>
         public Task<List<IMedia>> GetTodayPopular()
         {
-            return Task.FromResult(this.providers.SelectMany(p => p.GetTodayPopular().Result).Distinct(equlity).ToList());
+            return Task.FromResult(this.providers.SelectMany(p => p.GetTodayPopular().Result).Distinct().ToList());
         }
 
         /// <summary>
@@ -61,7 +55,7 @@
         /// <returns>The <see cref="Task{List{IMedia}}"/>.</returns>
         public Task<List<IMedia>> Resolve(string url)
         {
-            return Task.FromResult(this.providers.Where(p => p.Match(url)).SelectMany(p => p.Resolve(url).Result).Distinct(equlity).ToList());
+            return Task.FromResult(this.providers.Where(p => p.Match(url)).SelectMany(p => p.Resolve(url).Result).Distinct().ToList());
         }
     }
 }

@@ -270,7 +270,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Tasks
             var t = new TaskTriggerInfo
             {
                 Type = TaskTriggerInfo.TriggerInterval,
-                IntervalTicks = (long)TimeSpan.FromMinutes(1).TotalMilliseconds
+                IntervalTicks = (long)TimeSpan.FromMinutes(1).TotalMilliseconds * 10000
             };
             return new[] { t };
         }

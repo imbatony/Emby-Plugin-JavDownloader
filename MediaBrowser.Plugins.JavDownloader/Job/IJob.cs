@@ -56,7 +56,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Job
         /// <summary>
         /// Gets or sets the Key.
         /// </summary>
-        public string Key { get; set; }
+        public abstract string Key { get;}
 
         /// <summary>
         /// The ToModel.
@@ -84,7 +84,6 @@ namespace MediaBrowser.Plugins.JavDownloader.Job
         {
             this.id = model.id;
             this.Status = model.Status;
-            this.Key = model.Key;
             this.Modified = model.Modified;
             this.Created = model.Created;
             FromExtra(model.Extra);

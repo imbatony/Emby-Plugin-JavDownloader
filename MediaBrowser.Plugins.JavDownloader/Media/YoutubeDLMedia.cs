@@ -62,7 +62,9 @@ namespace MediaBrowser.Plugins.JavDownloader.Media
         {
             return new YoutubeDLDownloadJob
             {
-                Url = this.Url
+                Url = this.Url,
+                ExtractorKey = this.VideoData.ExtractorKey,
+                DisplayId = this.VideoData.DisplayID
             };
         }
     }

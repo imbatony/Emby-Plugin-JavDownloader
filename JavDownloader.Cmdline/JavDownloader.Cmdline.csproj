@@ -27,4 +27,8 @@
     <ProjectReference Include="..\MediaBrowser.Plugins.JavDownloader\MediaBrowser.Plugins.JavDownloader.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="nupkg\" />
+  </ItemGroup>
+
 </Project>

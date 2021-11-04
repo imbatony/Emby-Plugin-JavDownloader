@@ -23,12 +23,17 @@ namespace MediaBrowser.Plugins.JavDownloader.Job
         /// <summary>
         /// Gets or sets the Num.
         /// </summary>
-        public string Num
-        {
-            get => this.Key; set { this.Key = value; }
-        }
+        public string Num { get; set; }
 
+        /// <summary>
+        /// Gets the Type.
+        /// </summary>
         public override string Type => "download";
+
+        /// <summary>
+        /// Gets the Key.
+        /// </summary>
+        public override string Key => this.Num;
 
         /// <summary>
         /// The BuildExtra.
@@ -38,6 +43,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Job
         {
             var dict = new Dictionary<string, string>();
             dict["Videos"] = JsonConvert.SerializeObject(this.Videos);
+            dict["Num"] = this.Num;
             return dict;
         }
 
@@ -51,6 +57,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Job
             {
                 this.Videos = JsonConvert.DeserializeObject<List<VideoInfo>>(videos);
             }
+            this.Num = extra["Num"];
         }
     }
 }

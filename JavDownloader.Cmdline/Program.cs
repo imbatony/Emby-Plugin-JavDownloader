@@ -20,6 +20,7 @@
     using MediaBrowser.Plugins.JavDownloader.Media;
     using Newtonsoft.Json;
     using ShellProgressBar;
+    using YoutubeDLSharp;
 
     /// <summary>
     /// Defines the <see cref="Program" />.
@@ -63,33 +64,52 @@
         }
 
         /// <summary>
-        /// Gets or sets the Download
-        /// download......
+        /// Gets or sets the Url.
         /// </summary>
         [Argument('u', "url", "url")]
         internal static string Url { get; set; }
 
         /// <summary>
-        /// Gets or sets the Download
-        /// download......
+        /// Gets or sets the FFmpegPath.
+        /// </summary>
+        [Argument('f', "ffmpeg", "ffmpeg")]
+        internal static string FFmpegPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the YoutubeDLPath.
+        /// </summary>
+        [Argument('y', "youtubedl", "youtubedl")]
+        internal static string YoutubeDLPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the TargetPath.
         /// </summary>
         [Argument('t', "target", "target path")]
         internal static string TargetPath { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether Version
-        /// 查看版本......
+        /// Gets or sets a value indicating whether Popular.
         /// </summary>
         [Argument('p', "popular", "popular")]
         internal static bool Popular { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether Resolve
-        /// Gets or sets the Resolve
-        /// download......
+        /// Gets or sets a value indicating whether Resolve.
         /// </summary>
         [Argument('r', "resoleve", "resoleve")]
         internal static bool Resolve { get; set; }
+
+        /// <summary>
+        /// The Init.
+        /// </summary>
+        internal static void Init()
+        {
+            var p = Plugin.Instance;
+            var conf = new PluginConfiguration();
+            conf.YoutubeDLPath = YoutubeDLPath ?? Environment.GetEnvironmentVariable("youtube-dl");
+            conf.FFmpegPath = FFmpegPath ?? Environment.GetEnvironmentVariable("ffmpege");
+            p.SetConf(conf);
+        }
 
         /// <summary>
         /// The ResolveHandler.
@@ -97,6 +117,7 @@
         /// <param name="argument">The argument<see cref="ArgumentMetadata"/>.</param>
         internal static void ResolveHandler(ArgumentMetadata argument)
         {
+            Init();
             List<IMedia> medias;
             if (Popular)
             {
@@ -113,7 +134,7 @@
         /// <summary>
         /// Gets or sets a value indicating whether Download
         /// Gets or sets the Resolve
-        /// download......
+        /// download.......
         /// </summary>
         [Argument('d', "download", "download")]
         internal static bool Download { get; set; }
@@ -124,6 +145,7 @@
         /// <param name="argument">The argument<see cref="ArgumentMetadata"/>.</param>
         internal static void DownloadHandler(ArgumentMetadata argument)
         {
+            Init();
             List<IMedia> medias;
             if (Popular)
             {
@@ -134,14 +156,32 @@
                 medias = Plugin.Instance.javProvider.Resolve(Url).Result;
             }
 
-            var downloadMedias = medias.Where(e => e is SimpleMedia).Select(e=> e as SimpleMedia).ToList();
-            var downloadList = DownloadItem.FromMedias(downloadMedias, TargetPath ?? Directory.GetCurrentDirectory());
-
             try
             {
                 new Thread(AddEscapeHandler) { IsBackground = true }.Start();
                 Initial();
-                DownloadAll(downloadList).Wait();
+                var downloadMedias = medias.Where(e => e is SimpleMedia).Select(e => e as SimpleMedia).ToList();
+                var downloadList = DownloadItem.FromMedias(downloadMedias, TargetPath ?? Directory.GetCurrentDirectory());
+                if (downloadList.Any())
+                {
+                    DownloadAll(downloadList).Wait();
+                }
+                var youtubemedias = medias.Where(e => e is YoutubeDLMedia).Select(e => e as YoutubeDLMedia).ToList();
+                if (youtubemedias.Any())
+                {
+                    var dl = new YoutubeDL
+                    {
+                        FFmpegPath = Plugin.Instance.Configuration.FFmpegPath,
+                        YoutubeDLPath = Plugin.Instance.Configuration.YoutubeDLPath,
+                        OutputFolder = Directory.GetCurrentDirectory()
+                    };
+                    var progress = new Progress<DownloadProgress>(UpdateTitleInfo);
+                    foreach (var m in youtubemedias)
+                    {
+                        ConsoleProgress = new ProgressBar(10000, $"Downloading {m.Title} ...", ProcessBarOption);
+                        dl.RunVideoDownload(m.Url, progress: progress).Wait();
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -155,7 +195,7 @@
 
         /// <summary>
         /// Gets or sets a value indicating whether Version
-        /// 查看版本......
+        /// 查看版本.......
         /// </summary>
         [Argument('v', "version", "工具版本号")]
         internal static bool Version { get; set; }
@@ -171,7 +211,7 @@
 
         /// <summary>
         /// Gets or sets a value indicating whether Help
-        /// 查看帮助文档......
+        /// 查看帮助文档.......
         /// </summary>
         [Argument('h', "help", "查看帮助文档")]
         internal static bool Help { get; set; }
@@ -384,6 +424,18 @@
         {
             ConsoleProgress.Tick((int)(e.ProgressPercentage * 100));
             UpdateTitleInfo(e);
+        }
+
+        /// <summary>
+        /// The UpdateTitleInfo.
+        /// </summary>
+        /// <param name="e">The e<see cref="DownloadProgressChangedEventArgs"/>.</param>
+        private static void UpdateTitleInfo(DownloadProgress e)
+        {
+            ConsoleProgress.Tick((int)(e.Progress * 10000));
+            Console.Title = $"{e.Progress * 100}%  -  " +
+                            $"{e.DownloadSpeed}/s  -  " +
+                            $"{e.ETA} left    -  ";
         }
 
         /// <summary>

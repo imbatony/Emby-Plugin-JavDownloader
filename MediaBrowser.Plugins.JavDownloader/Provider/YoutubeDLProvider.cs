@@ -8,9 +8,8 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using HtmlAgilityPack;
+    using MediaBrowser.Model.Logging;
     using MediaBrowser.Plugins.JavDownloader.Extensions;
-    using MediaBrowser.Plugins.JavDownloader.Job;
     using MediaBrowser.Plugins.JavDownloader.Media;
     using YoutubeDLSharp;
 
@@ -25,15 +24,24 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider
         private readonly YoutubeDL ytdl;
 
         /// <summary>
+        /// Defines the logger.
+        /// </summary>
+        private readonly ILogger logger;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="YoutubeDLProvider"/> class.
         /// </summary>
         /// <param name="youtubedlPath">The youtubedlPath<see cref="string"/>.</param>
         /// <param name="ffmpegPath">The ffmpegPath<see cref="string"/>.</param>
-        public YoutubeDLProvider(string youtubedlPath, string ffmpegPath)
+        /// <param name="logger">The logger<see cref="ILogger"/>.</param>
+        public YoutubeDLProvider(string youtubedlPath, string ffmpegPath, ILogger logger)
         {
+            this.logger = logger;
+            logger.Info($"YoutubeDL enabled,FFmpegPath is {ffmpegPath}, YoutubeDLPath is {youtubedlPath}");
             this.ytdl = new YoutubeDL();
             this.ytdl.FFmpegPath = ffmpegPath;
             this.ytdl.YoutubeDLPath = youtubedlPath;
+            this.logger = logger;
         }
 
         /// <summary>
@@ -75,7 +83,12 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider
                    new YoutubeDLMedia(result.Data)
                 };
             }
-            return new List<IMedia>();
+            else
+            {
+                logger.Error($"fail to fetch data for {url}, output is ");
+                logger.Error(string.Join("\n", result.ErrorOutput));
+                return new List<IMedia>();
+            }
         }
     }
 }
