@@ -37,9 +37,6 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
             this.resolver = new SuperJavDetailResolver(mock.Object, new Mock<ILogger>().Object);
             var result = this.resolver.GetMedias("https://supjav.com/zh/118580.html").Result;
             Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(1, result[0].Videos.Count);
-            Assert.AreEqual("http://streamtape.com/get_video?id=x9W3YepODQikpY9&expires=1635026275&ip=FROsFxcnDS9X&token=ionx9j3uqWWE&stream=1", result[0].Videos[0].Url);
-
         }
 
         /// <summary>
@@ -67,9 +64,6 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
             this.resolver = new SuperJavDetailResolver(mock.Object, new Mock<ILogger>().Object);
             var result = this.resolver.GetMedias("https://supjav.com/zh/118580.html").Result;
             Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(1, result[0].Videos.Count);
-            Assert.AreEqual("http://streamtape.com/get_video?id=XjkMqG0k9AHDle4&expires=1635110222&ip=FROsFxcnDS9X&token=9lh_i9hgSghI&stream=1", result[0].Videos[0].Url);
-
         }
     }
 }

@@ -1,4 +1,10 @@
-﻿namespace MediaBrowser.Plugins.JavDownloader.Tasks
+﻿// -----------------------------------------------------------------------
+// <copyright file="JavResolveTask.cs" author="imbatony">
+//     Copyright (c) JavDownloader.  All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MediaBrowser.Plugins.JavDownloader.Tasks
 {
     using System;
     using System.Collections.Generic;
@@ -20,6 +26,11 @@
         private readonly ILogger logger;
 
         /// <summary>
+        /// Defines the jobs.
+        /// </summary>
+        private readonly JobRepository jobs;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="JavResolveTask"/> class.
         /// </summary>
         /// <param name="logManager">The logManager<see cref="ILogManager"/>.</param>
@@ -28,6 +39,7 @@
             )
         {
             logger = logManager.GetLogger("JavResolveTask");
+            this.jobs = Plugin.Instance.JobRepository;
         }
 
         /// <summary>
@@ -75,7 +87,7 @@
         {
             logger.Info($"Running...");
             progress.Report(0);
-            if (!Plugin.Instance.Configuration.EnableDownloadTask)
+            if (!IsEnabled)
             {
                 logger.Info($"Skip Download...");
                 progress.Report(100);
@@ -85,8 +97,8 @@
             {
                 var list = await Plugin.Instance.javProvider.GetTodayPopular();
                 logger.Info($"Target Path is {Plugin.Instance.Configuration.DownloadTargetPath}...");
-                var downloadList = DownloadItem.FromMedias(list, Plugin.Instance.Configuration.DownloadTargetPath);
-                var needDownload = downloadList.Where(e => !Plugin.Instance.DB.Jobs.Exists(f => f.Num == e.Num && f.Type == "download"));
+                var downloadList = list.Select(e => e.CreateDownloadJob()).ToList();
+                var needDownload = downloadList.Where(e => !jobs.IsExist(e));
                 if (needDownload.Count() == 0)
                 {
                     logger.Info($"No file need Download...");
@@ -97,20 +109,10 @@
                 logger.Info($"{needDownload.Count()} files need Download...");
                 foreach (var item in needDownload)
                 {
-                    Plugin.Instance.DB.Jobs.Insert(new Job
-                    {
-                        Type = "download",
-                        Num = item.Num,
-                        Status = 0,
-                        Videos = item.Videos,
-                        Modified = DateTime.UtcNow,
-                        Created = DateTime.UtcNow,
-                        Quality = item.Quality,
-                        FileType = item.FileType
-                    });
+                    jobs.UpsertJob(item);
                 }
 
-                progress.Report(100); 
+                progress.Report(100);
             }
         }
 

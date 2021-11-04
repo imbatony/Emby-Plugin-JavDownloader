@@ -46,7 +46,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider
         public override async Task<List<IMedia>> GetTodayPopular()
         {
             var list = await this.popularResolver.Resolve();
-            return list.SelectMany(e => this.Resolve(e).Result).Distinct(new MediaEqualityComparer()).ToList();
+            return list.SelectMany(e => this.Resolve(e).Result).Distinct().ToList();
         }
 
         /// <summary>

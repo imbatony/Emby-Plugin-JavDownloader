@@ -1,9 +1,15 @@
-﻿namespace MediaBrowser.Plugins.JavDownloader.Service
+﻿// -----------------------------------------------------------------------
+// <copyright file="JavDownloadService.cs" author="imbatony">
+//     Copyright (c) JavDownloader.  All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MediaBrowser.Plugins.JavDownloader.Service
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
-    using LiteDB;
     using MediaBrowser.Common.Extensions;
     using MediaBrowser.Controller.Net;
     using MediaBrowser.Model.Logging;
@@ -11,13 +17,14 @@
     using MediaBrowser.Model.Tasks;
     using MediaBrowser.Plugins.JavDownloader.Data;
     using MediaBrowser.Plugins.JavDownloader.Extensions;
+    using MediaBrowser.Plugins.JavDownloader.Job;
     using MediaBrowser.Plugins.JavDownloader.Provider;
 
     /// <summary>
     /// Defines the <see cref="ResolveReqeust" />.
     /// </summary>
     [Route("/emby/Plugins/JavDownloader/Download", "GET")]
-    public class DownloadReqeust : IReturn<List<DownloadItem>>
+    public class DownloadReqeust : IReturn<List<IJob>>
     {
         /// <summary>
         /// Gets or sets the Url.
@@ -31,19 +38,9 @@
     public class JavDownloaderService : IService, IRequiresRequest
     {
         /// <summary>
-        /// Defines the resultFactory.
-        /// </summary>
-        private readonly IHttpResultFactory resultFactory;
-
-        /// <summary>
-        /// Defines the taskManager.
-        /// </summary>
-        private readonly ITaskManager taskManager;
-
-        /// <summary>
         /// Defines the jobs.
         /// </summary>
-        private readonly ILiteCollection<Job> jobs;
+        private readonly JobRepository jobs;
 
         /// <summary>
         /// Defines the logger.
@@ -56,7 +53,7 @@
         private readonly CompositeJavProvider javProvider;
 
         /// <summary>
-        /// Gets or sets the request context.......
+        /// Gets or sets the request.
         /// </summary>
         public IRequest Request { get; set; }
 
@@ -66,17 +63,11 @@
         /// <param name="logManager">The logManager<see cref="ILogManager"/>.</param>
         /// <param name="resultFactory">The resultFactory<see cref="IHttpResultFactory"/>.</param>
         /// <param name="taskManager">The taskManager<see cref="ITaskManager"/>.</param>
-        public JavDownloaderService(
-            ILogManager logManager,
-            IHttpResultFactory resultFactory,
-            ITaskManager taskManager
-            )
+        public JavDownloaderService(ILogManager logManager)
         {
             this.logger = logManager.GetLogger("JavResolveService");
             this.javProvider = Plugin.Instance.javProvider;
-            this.resultFactory = resultFactory;
-            this.taskManager = taskManager;
-            this.jobs = Plugin.Instance.DB.Jobs;
+            this.jobs = Plugin.Instance.JobRepository;
         }
 
         /// <summary>
@@ -84,7 +75,7 @@
         /// </summary>
         /// <param name="url">The url<see cref="string"/>.</param>
         /// <returns>The <see cref="object"/>.</returns>
-        private async Task<List<DownloadItem>> DoGet(string url)
+        private async Task<List<IJob>> DoGet(string url)
         {
             logger.Info($"{url}");
 
@@ -92,31 +83,13 @@
                 throw new ResourceNotFoundException();
 
             var meidas = await javProvider.Resolve(url);
-            var downloads = DownloadItem.FromMedias(meidas, Plugin.Instance.Configuration.DownloadTargetPath);
+            var downloads = meidas.Select(e => e.CreateDownloadJob()).ToList();
             var now = DateTime.UtcNow.AddDays(-10);
             foreach (var item in downloads)
             {
-                if (jobs.Exists(e => e.Num == item.Num && e.Created > now))
+                if (!jobs.IsExist(item))
                 {
-                    item.Extras["jobId"] = jobs.FindOne(e => e.Num == item.Num && e.Created > now).id.ToString();
-                    item.Extras["exists"] = "true";
-                }
-
-                else
-                {
-                    var job = jobs.Insert(new Job
-                    {
-                        Type = "download",
-                        Num = item.Num,
-                        Status = 0,
-                        Videos = item.Videos,
-                        Modified = DateTime.UtcNow,
-                        Created = DateTime.UtcNow,
-                        Quality = item.Quality,
-                        FileType = item.FileType
-                    });
-                    item.Extras["jobId"] = job.AsObjectId.ToString();
-                    item.Extras["exists"] = "false";
+                    var job = jobs.UpsertJob(item);
                 }
             }
             return downloads;
@@ -127,7 +100,7 @@
         /// </summary>
         /// <param name="request">The request<see cref="ResolveReqeust"/>.</param>
         /// <returns>The <see cref="object"/>.</returns>
-        public List<DownloadItem> Get(DownloadReqeust request)
+        public List<IJob> Get(DownloadReqeust request)
         {
             return Task.Run(() => DoGet(request.Url)).GetAwaiter().GetResult();
         }

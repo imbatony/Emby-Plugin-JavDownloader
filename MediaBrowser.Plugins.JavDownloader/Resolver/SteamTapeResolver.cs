@@ -53,9 +53,9 @@
                 var tokenLength = token.Length;
                 var realtoken = detail.Text.Substring(detail.Text.LastIndexOf("token"), tokenLength + 6).Substring(6, tokenLength);
                 videoLink = $"http://streamtape.com/get_video?id={id}&expires={expires}&ip={ip}&token={realtoken}&stream=1";
-                simpleMedia.Videos = new List<JavVideo>
+                simpleMedia.Videos = new List<VideoInfo>
             {
-                new JavVideo
+                new VideoInfo
                 {
                     Type = VideoType.mp4,
                     Url = videoLink,

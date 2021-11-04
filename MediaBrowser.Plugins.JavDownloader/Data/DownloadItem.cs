@@ -41,7 +41,7 @@
         /// <summary>
         /// Gets the Videos.
         /// </summary>
-        public List<JavVideo> Videos { get; set; }
+        public List<VideoInfo> Videos { get; set; }
 
         /// <summary>
         /// Gets the Extras.
@@ -53,7 +53,7 @@
         /// <param name="medias">The medias<see cref="List{IMedia}"/>.</param>
         /// <param name="targetPath">The targetPath<see cref="string"/>.</param>
         /// <returns>The <see cref="List{DownloadItem}"/>.</returns>
-        public static List<DownloadItem> FromMedias(List<IMedia> medias, string targetPath)
+        public static List<DownloadItem> FromMedias(List<SimpleMedia> medias, string targetPath)
         {
             return medias.Select(e =>
             {

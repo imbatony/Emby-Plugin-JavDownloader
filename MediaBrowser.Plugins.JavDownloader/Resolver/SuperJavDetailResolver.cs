@@ -20,7 +20,6 @@ namespace MediaBrowser.Plugins.JavDownloader.Resolver
     /// </summary>
     public class SuperJavDetailResolver : AbstractMediaResolver
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SuperJavDetailResolver"/> class.
         /// </summary>
@@ -28,7 +27,6 @@ namespace MediaBrowser.Plugins.JavDownloader.Resolver
         /// <param name="logger">The logger<see cref="ILogger"/>.</param>
         public SuperJavDetailResolver(IHttpClientEx httpClientEx, ILogger logger) : base(httpClientEx, logger)
         {
-            
         }
 
         /// <summary>
@@ -47,7 +45,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Resolver
             if (cds != null && cds.Any())
             {
                 var list = new List<IMedia>();
-                for(int i = 0; i < streamtapes.Count; i++)
+                for (int i = 0; i < streamtapes.Count; i++)
                 {
                     var media = new SimpleMedia
                     {
@@ -55,7 +53,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Resolver
                         Num = title.ExtractKey(),
                         Url = url,
                         Provider = "SuperJav",
-                        Part = $"{i+1}"
+                        Part = $"{i + 1}"
                     };
                     var medias = new SteamTapeResolver(httpClientEx, logger, media).GetMedias(streamtapes[i]).Result;
                     list.AddRange(medias);
@@ -63,7 +61,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Resolver
 
                 return list;
             }
-            else if(streamtapes.Any())
+            else if (streamtapes.Any())
             {
                 var media = new SimpleMedia
                 {
@@ -74,10 +72,11 @@ namespace MediaBrowser.Plugins.JavDownloader.Resolver
                     Part = "1"
                 };
                 return new SteamTapeResolver(httpClientEx, logger, media).GetMedias(streamtapes[0]).Result;
-            }else{
+            }
+            else
+            {
                 return new List<IMedia>();
             }
-            
         }
     }
 }

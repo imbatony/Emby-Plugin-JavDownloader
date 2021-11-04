@@ -7,9 +7,9 @@
 namespace MediaBrowser.Plugins.JavDownloader.Media
 {
     /// <summary>
-    /// Defines the <see cref="JavVideo" />.
+    /// Defines the <see cref="VideoInfo" />.
     /// </summary>
-    public class JavVideo
+    public class VideoInfo
     {
         /// <summary>
         /// Gets or sets the Url.

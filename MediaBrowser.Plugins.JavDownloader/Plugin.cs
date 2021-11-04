@@ -38,18 +38,19 @@ namespace MediaBrowser.Plugins.JavDownloader
             Instance = this;
             logger = logManager.GetLogger("Plugin");
             logger?.Info($"{Name} - Loaded.");
-            DB = ApplicationDbContext.Create(applicationPaths);
-            this.javProvider = new CompositeJavProvider(new List<IJavProvider>
+            if (applicationPaths != null)
             {
-                new SuperJavProvider("https://supjav.com",logManager.GetLogger("superjav"))
-            });
+                var db = ApplicationDbContext.Create(applicationPaths);
+                this.JobRepository = new JobRepository(db);
+            }
+            this.logManager = logManager;
         }
 
         /// <summary>
         /// Gets the DB
-        /// 数据库..
+        /// 数据库......
         /// </summary>
-        public ApplicationDbContext DB { get; private set; }
+        public JobRepository JobRepository { get; private set; }
 
         /// <summary>
         /// The GetPages.
@@ -72,6 +73,22 @@ namespace MediaBrowser.Plugins.JavDownloader
         }
 
         /// <summary>
+        /// The CreateProvider.
+        /// </summary>
+        private void CreateProvider()
+        {
+            var providers = new List<IJavProvider>
+            {
+                new SuperJavProvider("https://supjav.com",logManager.GetLogger("superjav"))
+            };
+            if (Configuration.EnableYoutubeDL)
+            {
+                providers.Add(new YoutubeDLProvider(Configuration.YoutubeDLPath, Configuration.FFmpegPath, logManager.GetLogger("youtube-dl")));
+            }
+            this._provider = new CompositeJavProvider(providers);
+        }
+
+        /// <summary>
         /// Defines the _id.
         /// </summary>
         private Guid _id = new Guid("0B58AD46-DEE3-495D-B8C4-AA0A0CD2A83F");
@@ -85,7 +102,7 @@ namespace MediaBrowser.Plugins.JavDownloader
         }
 
         /// <summary>
-        /// 名称..
+        /// 名称......
         /// </summary>
         public const string NAME = "JavDownloader";
 
@@ -127,6 +144,8 @@ namespace MediaBrowser.Plugins.JavDownloader
         public void SetConf(PluginConfiguration configuration)
         {
             this.Configuration = configuration;
+            Configuration.ConfigurationVersion = DateTime.Now.Ticks;
+            CreateProvider();
         }
 
         /// <summary>
@@ -140,9 +159,33 @@ namespace MediaBrowser.Plugins.JavDownloader
         private readonly ILogger logger;
 
         /// <summary>
+        /// Defines the logManager.
+        /// </summary>
+        private readonly ILogManager logManager;
+
+        /// <summary>
         /// Gets the javProvider.
         /// </summary>
-        public CompositeJavProvider javProvider { get; private set; }
+        public CompositeJavProvider javProvider
+        {
+            get
+            {
+                if (_provider != null)
+                {
+                    return _provider;
+                }
+                else
+                {
+                    CreateProvider();
+                    return _provider;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Defines the _provider.
+        /// </summary>
+        private CompositeJavProvider _provider;
 
         /// <summary>
         /// The SaveConfiguration.
@@ -151,6 +194,16 @@ namespace MediaBrowser.Plugins.JavDownloader
         {
             Configuration.ConfigurationVersion = DateTime.Now.Ticks;
             base.SaveConfiguration();
+        }
+
+        /// <summary>
+        /// The UpdateConfiguration.
+        /// </summary>
+        /// <param name="configuration">The configuration<see cref="BasePluginConfiguration"/>.</param>
+        public override void UpdateConfiguration(BasePluginConfiguration configuration)
+        {
+            base.UpdateConfiguration(configuration);
+            CreateProvider();
         }
     }
 }

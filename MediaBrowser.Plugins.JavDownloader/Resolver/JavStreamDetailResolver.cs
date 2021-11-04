@@ -43,7 +43,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Resolver
                 { "r","" },
                 {"d","javstream.top" }
             });
-            var videos = json.Data.Select(e => new JavVideo
+            var videos = json.Data.Select(e => new VideoInfo
             {
                 Url = e.File,
                 Type = VideoType.mp4,
