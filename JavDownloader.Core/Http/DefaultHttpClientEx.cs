@@ -4,70 +4,34 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MediaBrowser.Plugins.JavDownloader.Http
+namespace JavDownloader.Core.Http
 {
     using System;
     using System.IO;
     using System.Net.Http;
-    using System.Runtime.CompilerServices;
     using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
-    /// HttpClient.
+    /// Defines the <see cref="DefaultHttpClientEx" />.
     /// </summary>
-    public class HttpClientEx : IHttpClientEx
+    public class DefaultHttpClientEx : IHttpClientEx
     {
         /// <summary>
-        /// 客户端初始话方法.
-        /// </summary>
-        private readonly Action<HttpClient> ac;
-
-        /// <summary>
-        /// 当前客户端.
+        /// Defines the client.
         /// </summary>
         private HttpClient client = null;
 
         /// <summary>
-        /// 配置版本号.
+        /// The GetClient.
         /// </summary>
-        private long version = -1;
-
-        /// <summary>
-        /// 上一个客户端.
-        /// </summary>
-        private HttpClient client_old = null;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HttpClientEx"/> class.
-        /// </summary>
-        /// <param name="ac">The ac<see cref="Action{HttpClient}"/>.</param>
-        public HttpClientEx(Action<HttpClient> ac = null)
+        /// <returns>The <see cref="HttpClient"/>.</returns>
+        public virtual HttpClient GetClient()
         {
-            this.ac = ac;
-        }
-
-        /// <summary>
-        /// 获取一个 HttpClient.
-        /// </summary>
-        /// <returns>.</returns>
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public HttpClient GetClient()
-        {
-            if (client != null && version == Plugin.Instance.Configuration.ConfigurationVersion)
-                return client;
-
-            if (client_old != null)
+            if (client == null)
             {
-                client_old.Dispose();
-                client_old = null;
+                client = new HttpClient();
             }
-            client_old = client;
-
-            var handler = new ProxyHttpClientHandler(false);
-            client = new HttpClient(handler, true);
-            ac?.Invoke(client);
-
             return client;
         }
 
@@ -113,6 +77,11 @@ namespace MediaBrowser.Plugins.JavDownloader.Http
         public Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
             => GetClient().PostAsync(requestUri, content);
 
+        /// <summary>
+        /// The SendAsync.
+        /// </summary>
+        /// <param name="message">The message<see cref="HttpRequestMessage"/>.</param>
+        /// <returns>The <see cref="Task{HttpResponseMessage}"/>.</returns>
         public Task<HttpResponseMessage> SendAsync(HttpRequestMessage message) => GetClient().SendAsync(message);
 
         /// <summary>
@@ -121,4 +90,3 @@ namespace MediaBrowser.Plugins.JavDownloader.Http
         public Uri BaseAddress => GetClient().BaseAddress;
     }
 }
-

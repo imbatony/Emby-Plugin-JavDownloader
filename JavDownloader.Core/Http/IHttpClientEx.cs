@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MediaBrowser.Plugins.JavDownloader.Http
+namespace JavDownloader.Core.Http
 {
     using System;
     using System.IO;

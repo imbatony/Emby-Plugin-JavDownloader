@@ -43,6 +43,10 @@
     <EmbeddedResource Include="plugin.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\JavDownloader.Core\JavDownloader.Core.csproj" />
+  </ItemGroup>
+
   <!--合并外部程序集-->
   <Target Name="ILRepack" AfterTargets="PostBuildEvent" Condition="'$(Configuration)'=='Release'">
     <Exec Command="&quot;$(ILRepack)&quot; /out:$(AssemblyName)-release.dll $(AssemblyName).dll Downloader.dll Newtonsoft.Json.dll MihaZupan.HttpToSocks5Proxy.dll HtmlAgilityPack.dll LiteDB.dll" WorkingDirectory="$(OutputPath)" />

@@ -4,17 +4,16 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MediaBrowser.Plugins.JavDownloader.Extensions
+namespace JavDownloader.Core.Extensions
 {
     using System;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using global::JavDownloader.Core.Http;
     using HtmlAgilityPack;
-    using MediaBrowser.Model.Logging;
-    using MediaBrowser.Plugins.JavDownloader.Http;
+    using JavDownloader.Core.Logger;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Defines the <see cref="IHttpClientExExtensions" />.

@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MediaBrowser.Plugins.JavDownloader.Extensions
+namespace JavDownloader.Core.Extensions
 {
     using System;
     using System.Collections.Generic;
@@ -173,6 +173,20 @@ namespace MediaBrowser.Plugins.JavDownloader.Extensions
         public static string ExtractKey(this string key)
         {
             return key.Substring(0, key.IndexOf(" ")).ToUpper();
+        }
+
+        /// <summary>
+        /// The ExtractMatch.
+        /// </summary>
+        /// <param name="source">The source<see cref="string"/>.</param>
+        /// <param name="regex">The regex<see cref="Regex"/>.</param>
+        /// <param name="groupName">The groupName<see cref="string"/>.</param>
+        /// <returns>The <see cref="string"/>.</returns>
+        public static string ExtractMatch(this string source, Regex regex, string groupName)
+        {
+            if (string.IsNullOrEmpty(source)) return string.Empty;
+            var match = regex.Match(source);
+            return match.Success ? match.Groups[groupName].Value : string.Empty;
         }
     }
 }

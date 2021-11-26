@@ -1,0 +1,114 @@
+{
+  "success": true,
+  "player": {
+    "poster_file": "\/userdata\/348868\/poster\/4\/y0\/4y0q4az66m7gk3e.png?v=1627662174",
+    "logo_file": "\/userdata\/348868\/player\/14144_logo.png?v=1612704345",
+    "logo_position": "top-right",
+    "logo_link": "https:\/\/supjav.com",
+    "logo_margin": 20,
+    "aspectratio": "16:9",
+    "powered_text": "Powered by supjav.com",
+    "powered_url": "https:\/\/supjav.com",
+    "css_background": "rgba(0, 0, 0, 0)",
+    "css_text": "#f2f2f2",
+    "css_menu": "#333333",
+    "css_mntext": "#ffffff",
+    "css_caption": "#000000",
+    "css_cttext": "#ffffff",
+    "css_ctsize": "15",
+    "css_ctopacity": "40",
+    "css_ctedge": "none",
+    "css_icon": "rgba(255, 255, 255, 0.8)",
+    "css_ichover": "#ffffff",
+    "css_tsprogress": "#f2f2f2",
+    "css_tsrail": "rgba(255, 255, 255, 0.3)",
+    "css_button": "#565656",
+    "css_bttext": "#ffffff",
+    "opt_autostart": false,
+    "opt_title": true,
+    "opt_quality": true,
+    "opt_caption": true,
+    "opt_download": false,
+    "opt_sharing": false,
+    "opt_playrate": true,
+    "opt_mute": false,
+    "opt_loop": false,
+    "opt_vr": true,
+    "opt_cast": { "appid": "00000000" },
+    "opt_nodefault": true,
+    "opt_forceposter": false,
+    "opt_parameter": true,
+    "restrict_domain": "supjav.com,javsaga.ninja",
+    "restrict_action": "DisplayErrorPage",
+    "restrict_target": "If you like this video, please visit https:\/\/supjav.com to watch more videos for free!!",
+    "resume_enable": true,
+    "resume_text": "Welcome back! You left off at xx:xx:xx. Would you like to resume watching?",
+    "resume_yes": "Yes, Please",
+    "resume_no": "No, Thanks",
+    "adb_enable": true,
+    "adb_offset": "0",
+    "adb_text": "Please turn off adblockers in order to continue watching",
+    "ads_adult": true,
+    "ads_pop": false,
+    "ads_vast": true,
+    "ads_free": 0,
+    "trackingId": "G-M77K2S63H",
+    "income": {
+      "client": "vast",
+      "schedule": {
+        "vast-60": {
+          "tag": "https:\/\/syndication.realsrv.com\/splash.php?idzone=4189544",
+          "offset": "60",
+          "skipoffset": 5
+        },
+        "vast-300": {
+          "tag": "https:\/\/syndication.realsrv.com\/splash.php?idzone=4189544",
+          "offset": "300",
+          "skipoffset": 5
+        },
+        "vast-600": {
+          "tag": "https:\/\/syndication.realsrv.com\/splash.php?idzone=4189544",
+          "offset": "600",
+          "skipoffset": 5
+        },
+        "vast-900": {
+          "tag": "https:\/\/syndication.realsrv.com\/splash.php?idzone=4189544",
+          "offset": "900",
+          "skipoffset": 5
+        }
+      }
+    },
+    "incomePop": {
+      "pre": "https:\/\/he3mero6calli4s.com\/aas\/r45d\/vki\/1805515\/2040a614.js",
+      "30": "https:\/\/he3mero6calli4s.com\/aas\/r45d\/vki\/1805515\/2040a614.js",
+      "5%": "https:\/\/he3mero6calli4s.com\/aas\/r45d\/vki\/1805515\/2040a614.js",
+      "10%": "https:\/\/he3mero6calli4s.com\/aas\/r45d\/vki\/1805515\/2040a614.js",
+      "15%": "https:\/\/he3mero6calli4s.com\/aas\/r45d\/vki\/1805515\/2040a614.js",
+      "20%": "https:\/\/he3mero6calli4s.com\/aas\/r45d\/vki\/1805515\/2040a614.js",
+      "30%": "https:\/\/he3mero6calli4s.com\/aas\/r45d\/vki\/1805515\/2040a614.js"
+    },
+    "logger": "https:\/\/v3.fstats.xyz",
+    "revenue": "\/asset\/jquery\/slim-3.2.min.js?a=1&c=JP&t=449",
+    "revenue_fallback": "\/asset\/angular.min.js?t=3",
+    "revenue_track": "https:\/\/mc.yandex.ru\/watch\/56353696"
+  },
+  "data": [
+    {
+      "file": "https:\/\/fvs.io\/redirector?token=TzR0cHZ1TnV4azVCTUxzZTkyYzU2YWx3dXVxVEtFZ2ZHMGNXR1M0ZGc2M2hCRmsxcDNFRHpJUzIza2dRM1dFWXR4Ym5lNFF6UFY3RG41UXdmUjVDay93NUYyZVdzemp0b3I1ZnhiTW1uSi9kMjZEa29QL2hVT2s4QmhhUUlmTzBWSGgwajlYZktVQm54LzhEMXhUeXJWR2dkejJTYjdLazpudEFUV1VRclhld3ljR0RUcnlNNTZ3PT0",
+      "label": "480p",
+      "type": "mp4"
+    },
+    {
+      "file": "https:\/\/fvs.io\/redirector?token=cU1jT2o4c1RjdlExS2IvR05GaDdZeGZRNzlKRFF3ZGtqUHY5WUVnM1pUNFRGNm0zZE1pVXBrOWw5UnZDUmU0dktPSm93ZmhjdXVudGl2T1VUak9lYjRUNnRWUjIxL1A1dFZBQ2FYcVF1ZVpoN0NKWktzQjc1RjZjczdMV1hoZTBUTEgrNFhuSDdZMGJMMHdMWkR3RHdNZ0NhMW5mbFAreTpOYWRic245RHZPaXh1aTZGWXBoNE13PT0",
+      "label": "720p",
+      "type": "mp4"
+    },
+    {
+      "file": "https:\/\/fvs.io\/redirector?token=cGtRcFNQV291cVRnTHhsK01mYVdML3hGdkhrZDl6K3ZqMFJvdFJ1SnVIaDJWbmcxd0h4bUpMcmNsK1VRc1E5My83dmdKMkM3WVZkYm1Nc1k1eFJ4b3BTQm9IdHRjb3FpbE0xN0JzMGRDVlVGMTJMYzFaMWcxOTFLcmU5OWNRNnFLZzJXZTEzVjFoRENXS0g1c3k1V0h0Z3ZHYnFuNm5RUnJRPT06akNvUnBpRVBGMS91allhcWlaZ0lMdz09",
+      "label": "1080p",
+      "type": "mp4"
+    }
+  ],
+  "captions": [],
+  "is_vr": false
+}

@@ -8,8 +8,8 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using global::JavDownloader.Core.Extensions;
     using MediaBrowser.Model.Logging;
-    using MediaBrowser.Plugins.JavDownloader.Extensions;
     using MediaBrowser.Plugins.JavDownloader.Media;
     using YoutubeDLSharp;
 

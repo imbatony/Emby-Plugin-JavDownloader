@@ -64,7 +64,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider.Tests
             var conf = new PluginConfiguration();
             Plugin plugin = new Plugin(new TestIApplicationPaths(), new NopeXMl(conf),new CommandLineLoggerManager());
             plugin.SetConf(conf);
-            var resolver = new SuperJavDetailResolver(new HttpClientEx(), new Mock<ILogger>().Object);
+            var resolver = new SuperJavDetailResolver(new ProxyHttpClientEx(), new Mock<ILogger>().Object);
             var medias = resolver.GetMedias("https://supjav.com/zh/118580.html").Result;
             Assert.IsNotNull(medias);
             Assert.AreEqual(1, medias.Count);

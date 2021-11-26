@@ -5,9 +5,6 @@
 
 namespace MediaBrowser.Plugins.JavDownloader
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
     using MediaBrowser.Common.Configuration;
     using MediaBrowser.Common.Plugins;
     using MediaBrowser.Model.Drawing;
@@ -17,6 +14,9 @@ namespace MediaBrowser.Plugins.JavDownloader
     using MediaBrowser.Plugins.JavDownloader.Configuration;
     using MediaBrowser.Plugins.JavDownloader.Data;
     using MediaBrowser.Plugins.JavDownloader.Provider;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
 
     /// <summary>
     /// Defines the <see cref="Plugin" />.
@@ -47,8 +47,7 @@ namespace MediaBrowser.Plugins.JavDownloader
         }
 
         /// <summary>
-        /// Gets the DB
-        /// 数据库......
+        /// Gets the JobRepository.
         /// </summary>
         public JobRepository JobRepository { get; private set; }
 
@@ -102,7 +101,7 @@ namespace MediaBrowser.Plugins.JavDownloader
         }
 
         /// <summary>
-        /// 名称......
+        /// Defines the NAME.
         /// </summary>
         public const string NAME = "JavDownloader";
 
@@ -138,7 +137,7 @@ namespace MediaBrowser.Plugins.JavDownloader
         }
 
         /// <summary>
-        /// The SetTestConf.
+        /// The SetConf.
         /// </summary>
         /// <param name="configuration">The configuration<see cref="PluginConfiguration"/>.</param>
         public void SetConf(PluginConfiguration configuration)

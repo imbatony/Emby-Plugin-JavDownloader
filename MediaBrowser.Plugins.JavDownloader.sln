@@ -7,12 +7,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBrowser.Plugins.JavDow
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C64C624E-B41A-41D0-8F9C-9189A2F07EDF}"
 	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
 		MediaBrowser.Plugins.JavDownloader.header = MediaBrowser.Plugins.JavDownloader.header
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBrowser.Plugins.JavDownloaderTests", "MediaBrowser.Plugins.JavDownloaderTests\MediaBrowser.Plugins.JavDownloaderTests.csproj", "{3C04BB87-69ED-4490-B60F-E12888996CB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavDownloader.Cmdline", "JavDownloader.Cmdline\JavDownloader.Cmdline.csproj", "{8F83755C-2010-4063-BFA9-A0D1879CC4E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JavDownloader.Cmdline", "JavDownloader.Cmdline\JavDownloader.Cmdline.csproj", "{8F83755C-2010-4063-BFA9-A0D1879CC4E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavDownloader.Core", "JavDownloader.Core\JavDownloader.Core.csproj", "{5DEC59F8-F024-48AD-840D-41CC6F331B59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavDownloader.Extractors", "JavDownloader.Extractors\JavDownloader.Extractors.csproj", "{A7A67606-2662-48F2-9D8E-BCD98B9565B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavDownloader.ExtractorsTests", "JavDownloader.ExtractorsTests\JavDownloader.ExtractorsTests.csproj", "{EA70DAEA-A590-4DCF-A1FE-3A10F51AB317}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +39,18 @@ Global
 		{8F83755C-2010-4063-BFA9-A0D1879CC4E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F83755C-2010-4063-BFA9-A0D1879CC4E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F83755C-2010-4063-BFA9-A0D1879CC4E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DEC59F8-F024-48AD-840D-41CC6F331B59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DEC59F8-F024-48AD-840D-41CC6F331B59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DEC59F8-F024-48AD-840D-41CC6F331B59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DEC59F8-F024-48AD-840D-41CC6F331B59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7A67606-2662-48F2-9D8E-BCD98B9565B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7A67606-2662-48F2-9D8E-BCD98B9565B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7A67606-2662-48F2-9D8E-BCD98B9565B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7A67606-2662-48F2-9D8E-BCD98B9565B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA70DAEA-A590-4DCF-A1FE-3A10F51AB317}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA70DAEA-A590-4DCF-A1FE-3A10F51AB317}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA70DAEA-A590-4DCF-A1FE-3A10F51AB317}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA70DAEA-A590-4DCF-A1FE-3A10F51AB317}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -68,7 +68,7 @@ namespace MediaBrowser.Plugins.JavDownloader.Provider
                 if (base_url == value && client != null)
                     return;
                 base_url = value;
-                client = new HttpClientEx(client => client.BaseAddress = new Uri(base_url));
+                client = new ProxyHttpClientEx(client => client.BaseAddress = new Uri(base_url));
             }
         }
 
